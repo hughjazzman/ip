@@ -13,9 +13,8 @@ public class Duke {
 
         String bye = horLine + "\n Bye. Hope to see you again soon!\n" + horLine;
 
-        // To do list and number of items tracker
-        String[] toDoList = new String[100];
-        int numItems = 0;
+        // Task list
+        Task[] taskList = new Task[100];
 
         // Scanner class for user input
         String line;
@@ -28,15 +27,28 @@ public class Duke {
         line = in.nextLine();
 
         while (!line.equals("bye")) {
-            // Print toDoList
+            // split using space as delimiter
+            String[] words = line.split(" ");
+
+            // Print taskList
             if (line.equals("list")) {
-                System.out.println(horLine);
-                for (int i = 1; i <= numItems; i++) {
-                    System.out.println(" " + i + ". " + toDoList[i-1] );
+                System.out.println(horLine + "\n Here are the tasks in your list:");
+                for (int i = 0; i < Task.getNumTasks(); i++) {
+
+                    System.out.println(" " + (i+1) + "." +
+                            taskList[i].getStatusIcon() +
+                            " " + taskList[i].getDescription() );
                 }
                 System.out.println(horLine);
+            } else if (words[0].equals("done")) { // Mark as done
+                int id = Integer.parseInt(words[1]);
+                Task task = taskList[id-1];
+                task.markAsDone();
+                System.out.println(horLine + "\n Nice! I've marked this task as done:\n   " +
+                         task.getStatusIcon() + " " + task.getDescription() + '\n' + horLine);
             } else { // Add to toDoList
-                toDoList[numItems++] = line;
+                Task newTask = new Task(line);
+                taskList[newTask.getId()-1] = newTask;
                 System.out.println(horLine + "\n added: " + line + '\n' + horLine);
             }
             line = in.nextLine();
