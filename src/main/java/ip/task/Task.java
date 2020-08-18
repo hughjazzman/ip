@@ -1,3 +1,4 @@
+package ip.task;
 
 public class Task {
 
@@ -13,7 +14,7 @@ public class Task {
     public Task(String description) {
         this.description = description;
         numTasks++;
-        id = numTasks;
+        this.id = numTasks;
         this.isDone = false;
     }
 
