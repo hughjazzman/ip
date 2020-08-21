@@ -4,16 +4,25 @@ import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args) {
+        String logo =
+                " ▄▄▄▄▄ ██   ▄▄▄▄▄▄   ▄▄▄▄▄▄   \n" +
+                "▄▀  █   █ █ ▀   ▄▄▀  ▀   ▄▄▀   \n" +
+                "    █   █▄▄█ ▄▀▀   ▄▀ ▄▀▀   ▄▀ \n" +
+                " ▄ █    █  █ ▀▀▀▀▀▀   ▀▀▀▀▀▀   \n" +
+                "  ▀        █                   \n" +
+                "          █                    \n" +
+                "         ▀                \n";
+
         // Horizontal Line reused
         String horLine = "____________________________________________________________";
 
         // Greeting and Farewell at start and end
         String greeting = horLine +
-                "\n Hello! I'm Duke\n" +
+                "\n Hey there! The name's Jazz.\n" +
                 " What can I do for you?\n" +
                 horLine;
 
-        String farewell = horLine + "\n Bye. Hope to see you again soon!\n" + horLine;
+        String farewell = horLine + "\n Bye. See you next time!\n" + horLine;
 
         // task.Task list
         Task[] taskList = new Task[100];
@@ -23,12 +32,17 @@ public class Duke {
         Scanner in = new Scanner(System.in);
 
         // Print greeting
-        System.out.println(greeting);
+        System.out.println(logo + greeting);
 
         // Parsing of user input
         line = in.nextLine();
 
         while (!line.equals("bye")) {
+            // Prevent blank tasks
+            if (line.isBlank()) {
+                line = in.nextLine();
+                continue;
+            }
             // split using space as delimiter
             String[] words = line.split(" ");
 
