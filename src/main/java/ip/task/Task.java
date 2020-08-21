@@ -8,7 +8,7 @@ public class Task {
     // instance variable for object ID
     protected int id;
 
-    // class variable for number of Items
+    // class variable for number of Tasks
     private static int numTasks = 0;
 
     public Task(String description) {

@@ -1,4 +1,5 @@
 import ip.task.Task;
+import ip.task.TaskManager;
 
 import java.util.Scanner;
 
@@ -25,7 +26,7 @@ public class Duke {
         String farewell = horLine + "\n Bye. See you next time!\n" + horLine;
 
         // task.Task list
-        Task[] taskList = new Task[100];
+        TaskManager taskManager = new TaskManager();
 
         // Scanner class for user input
         String line;
@@ -49,21 +50,15 @@ public class Duke {
             // Print taskList
             if (line.equals("list")) {
                 System.out.println(horLine + "\n Here are the tasks in your list:");
-                for (int i = 0; i < Task.getNumTasks(); i++) {
-                    System.out.println(" " + (i+1) + "." +
-                            taskList[i].getStatusIcon() +
-                            " " + taskList[i].getDescription() );
-                }
+                taskManager.listTasks();
                 System.out.println(horLine);
             } else if (words[0].equals("done")) { // Mark as done
                 int id = Integer.parseInt(words[1]);
-                Task task = taskList[id-1];
-                task.markAsDone();
+                Task task = taskManager.markAsDone(id);
                 System.out.println(horLine + "\n Nice! I've marked this task as done:\n   " +
                          task.getStatusIcon() + " " + task.getDescription() + '\n' + horLine);
             } else { // Add to taskList
-                Task newTask = new Task(line);
-                taskList[newTask.getId()-1] = newTask;
+                taskManager.addTask(line);
                 System.out.println(horLine + "\n added: " + line + '\n' + horLine);
             }
             line = in.nextLine();
