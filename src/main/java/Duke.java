@@ -57,25 +57,41 @@ public class Duke {
         printHorizontalLine();
     }
 
+    private static void printInvalid() {
+        printHorizontalLine();
+        System.out.println(" Invalid Command!");
+        printHorizontalLine();
+    }
+
     private static void execute(String line, TaskManager taskManager) {
         // Prevent blank tasks
         if (line.isBlank()) {
             return;
         }
-        // split using space as delimiter
-        String[] words = line.split(" ");
 
-        switch (words[0]) {
+        // Find position of first space
+        int pos_space = line.indexOf(" ");
+        // command is first word
+        String command = pos_space > 0 ? line.substring(0, pos_space) : line;
+        String num;
+
+        switch (command) {
         case "list":
             printList(taskManager);
             break;
         case "done":
-            execDone(taskManager, words[1]);
+            num = line.substring(pos_space + 1);
+            execDone(taskManager, num);
             break;
         case "bye":
             break;
+        case "todo":
+        case "deadline":
+        case "event":
+            execAddTask(taskManager, command, line);
+            break;
         default:
-            execAdd(taskManager, line);
+            printInvalid();
             break;
         }
     }
@@ -92,14 +108,47 @@ public class Duke {
         Task task = taskManager.markAsDone(id);
         printHorizontalLine();
         System.out.println(" Nice! I've marked this task as done:");
-        System.out.println(" " + task.getStatusIcon() + " " + task.getDescription());
+        System.out.println(" " + task.toString());
         printHorizontalLine();
     }
 
-    private static void execAdd(TaskManager taskManager, String line) {
-        taskManager.addTask(line);
+    private static void execAddTask(TaskManager taskManager, String command, String line) {
+        // Get index of actual task
+        int pos_desc = line.indexOf(" ") + 1, pos_by, pos_at;
+        if (pos_desc <= 0) {
+            printInvalid();
+            return;
+        }
+
+        String description = line.substring(pos_desc);
+        String by, at;
+        Task task = null;
+
+        switch (command) {
+        case "todo":
+            task = taskManager.addTodo(description);
+            break;
+        case "deadline":
+            pos_by = description.indexOf("/by");
+            by = description.substring(pos_by + 4);
+            description = description.substring(0, pos_by - 1);
+            task = taskManager.addDeadline(description, by);
+            break;
+        case "event":
+            pos_at = description.indexOf("/at");
+            at = description.substring(pos_at + 4);
+            description = description.substring(0, pos_at - 1);
+            task = taskManager.addEvent(description, at);
+            break;
+
+        }
         printHorizontalLine();
-        System.out.println(" added: " + line);
+        if (task != null) {
+            System.out.println(" Got it. I've added this task:\n  " +
+                    task.toString() +
+                    "\n Now you have " + TaskManager.getTasksCount() +
+                    " tasks in the list.");
+        }
         printHorizontalLine();
     }
 }
