@@ -5,25 +5,9 @@ import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args) {
-        String logo =
-                " ▄▄▄▄▄ ██   ▄▄▄▄▄▄   ▄▄▄▄▄▄   \n" +
-                "▄▀  █   █ █ ▀   ▄▄▀  ▀   ▄▄▀   \n" +
-                "    █   █▄▄█ ▄▀▀   ▄▀ ▄▀▀   ▄▀ \n" +
-                " ▄ █    █  █ ▀▀▀▀▀▀   ▀▀▀▀▀▀   \n" +
-                "  ▀        █                   \n" +
-                "          █                    \n" +
-                "         ▀                \n";
-
-        // Horizontal Line reused
-        String horLine = "____________________________________________________________";
-
-        // Greeting and Farewell at start and end
-        String greeting = horLine +
-                "\n Hey there! The name's Jazz.\n" +
-                " What can I do for you?\n" +
-                horLine;
-
-        String farewell = horLine + "\n Bye. See you next time!\n" + horLine;
+        // Print logo and greeting
+        printLogo();
+        printGreeting();
 
         // task.Task list
         TaskManager taskManager = new TaskManager();
@@ -32,40 +16,90 @@ public class Duke {
         String line;
         Scanner in = new Scanner(System.in);
 
-        // Print greeting
-        System.out.println(logo + greeting);
-
         // Parsing of user input
-        line = in.nextLine();
-
-        while (!line.equals("bye")) {
-            // Prevent blank tasks
-            if (line.isBlank()) {
-                line = in.nextLine();
-                continue;
-            }
-            // split using space as delimiter
-            String[] words = line.split(" ");
-
-            // Print taskList
-            if (line.equals("list")) {
-                System.out.println(horLine + "\n Here are the tasks in your list:");
-                taskManager.listTasks();
-                System.out.println(horLine);
-            } else if (words[0].equals("done")) { // Mark as done
-                int id = Integer.parseInt(words[1]);
-                Task task = taskManager.markAsDone(id);
-                System.out.println(horLine + "\n Nice! I've marked this task as done:\n   " +
-                         task.getStatusIcon() + " " + task.getDescription() + '\n' + horLine);
-            } else { // Add to taskList
-                taskManager.addTask(line);
-                System.out.println(horLine + "\n added: " + line + '\n' + horLine);
-            }
+        do {
             line = in.nextLine();
+            execute(line, taskManager);
+        } while (!line.equals("bye"));
+
+        printFarewell();
+    }
+
+    private static void printLine(int n) {
+        System.out.println("-".repeat(n));
+    }
+
+    private static void printHorizontalLine() {
+        printLine(60);
+    }
+
+    private static void printLogo() {
+        System.out.println(
+                " ▄▄▄▄▄ ██   ▄▄▄▄▄▄   ▄▄▄▄▄▄   \n" +
+                "▄▀  █   █ █ ▀   ▄▄▀  ▀   ▄▄▀   \n" +
+                "    █   █▄▄█ ▄▀▀   ▄▀ ▄▀▀   ▄▀ \n" +
+                " ▄ █    █  █ ▀▀▀▀▀▀   ▀▀▀▀▀▀   \n" +
+                "  ▀        █                   \n" +
+                "          █                    \n" +
+                "         ▀                ");
+    }
+
+    private static void printGreeting() {
+        printHorizontalLine();
+        System.out.println(" Hey there! The name's Jazz.\n" +
+                " What can I do for you?");
+        printHorizontalLine();
+    }
+
+    private static void printFarewell() {
+        printHorizontalLine();
+        System.out.println(" Bye. See you next time!");
+        printHorizontalLine();
+    }
+
+    private static void execute(String line, TaskManager taskManager) {
+        // Prevent blank tasks
+        if (line.isBlank()) {
+            return;
         }
+        // split using space as delimiter
+        String[] words = line.split(" ");
 
-        // Print farewell
-        System.out.println(farewell);
+        switch (words[0]) {
+        case "list":
+            printList(taskManager);
+            break;
+        case "done":
+            execDone(taskManager, words[1]);
+            break;
+        case "bye":
+            break;
+        default:
+            execAdd(taskManager, line);
+            break;
+        }
+    }
 
+    private static void printList(TaskManager taskManager) {
+        printHorizontalLine();
+        System.out.println("Here are the tasks in your list:");
+        taskManager.listTasks();
+        printHorizontalLine();
+    }
+
+    private static void execDone(TaskManager taskManager, String num) {
+        int id = Integer.parseInt(num);
+        Task task = taskManager.markAsDone(id);
+        printHorizontalLine();
+        System.out.println(" Nice! I've marked this task as done:");
+        System.out.println(" " + task.getStatusIcon() + " " + task.getDescription());
+        printHorizontalLine();
+    }
+
+    private static void execAdd(TaskManager taskManager, String line) {
+        taskManager.addTask(line);
+        printHorizontalLine();
+        System.out.println(" added: " + line);
+        printHorizontalLine();
     }
 }
