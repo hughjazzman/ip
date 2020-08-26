@@ -5,29 +5,18 @@ public class Task {
     protected String description;
     protected boolean isDone;
 
-    // instance variable for object ID
-    protected int id;
-
-    // class variable for number of Tasks
-    private static int numTasks = 0;
-
+    /**
+     * Constructor
+     *
+     * @param description Description of task.
+     */
     public Task(String description) {
         this.description = description;
-        numTasks++;
-        this.id = numTasks;
         this.isDone = false;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public static int getNumTasks() {
-        return numTasks;
     }
 
     public void markAsDone() {

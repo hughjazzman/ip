@@ -9,7 +9,7 @@ public class Duke {
         printLogo();
         printGreeting();
 
-        // task.Task list
+        // Create TaskManager
         TaskManager taskManager = new TaskManager();
 
         // Scanner class for user input
@@ -22,6 +22,7 @@ public class Duke {
             execute(line, taskManager);
         } while (!line.equals("bye"));
 
+        // Exit program
         printFarewell();
     }
 
@@ -63,6 +64,12 @@ public class Duke {
         printHorizontalLine();
     }
 
+    /**
+     * Executes appropriate methods based on the given command.
+     *
+     * @param line Line of user input.
+     * @param taskManager TaskManager object.
+     */
     private static void execute(String line, TaskManager taskManager) {
         // Prevent blank tasks
         if (line.isBlank()) {
@@ -112,6 +119,13 @@ public class Duke {
         printHorizontalLine();
     }
 
+    /**
+     * Adds appropriate type of Task based on the given command.
+     *
+     * @param taskManager TaskManager object.
+     * @param command Command determined from first word of the line of user input.
+     * @param line Rest of the line of user input.
+     */
     private static void execAddTask(TaskManager taskManager, String command, String line) {
         // Get index of actual task
         int pos_desc = line.indexOf(" ") + 1, pos_by, pos_at;
