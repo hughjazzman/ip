@@ -20,14 +20,22 @@ public class Task {
     }
 
     public void markAsDone() {
-        this.isDone = true;
+        isDone = true;
     }
 
+    /**
+     * Returns a status icon depending on whether task isDone.
+     * @return Tick symbol if isDone else X symbol.
+     */
     public String getStatusIcon() {
         return isDone ? "[\u2713]" : "[\u2718]"; //return tick or X symbols
     }
 
+    /**
+     * Returns a String representation of the Task, using the statusIcon and description.
+     * @return String representation.
+     */
     public String toString() {
-        return this.getStatusIcon() + " " + this.getDescription();
+        return getStatusIcon() + " " + getDescription();
     }
 }

@@ -77,9 +77,9 @@ public class Duke {
         }
 
         // Find position of first space
-        int pos_space = line.indexOf(" ");
+        int spacePos = line.indexOf(" ");
         // command is first word
-        String command = pos_space > 0 ? line.substring(0, pos_space) : line;
+        String command = spacePos > 0 ? line.substring(0, spacePos) : line;
         String num;
 
         switch (command) {
@@ -87,13 +87,13 @@ public class Duke {
             printList(taskManager);
             break;
         case "done":
-            num = line.substring(pos_space + 1);
+            num = line.substring(spacePos + 1);
             execDone(taskManager, num);
             break;
         case "bye":
             break;
-        case "todo":
-        case "deadline":
+        case "todo": // Fallthrough
+        case "deadline": // Fallthrough
         case "event":
             execAddTask(taskManager, command, line);
             break;
@@ -127,42 +127,44 @@ public class Duke {
      * @param line Rest of the line of user input.
      */
     private static void execAddTask(TaskManager taskManager, String command, String line) {
-        // Get index of actual task
-        int pos_desc = line.indexOf(" ") + 1, pos_by, pos_at;
-        if (pos_desc <= 0) {
+        // Position of task description, /by marker, and /at marker
+        int descPos = line.indexOf(" ") + 1, byPos, atPos;
+        // Check for blank description
+        if (descPos <= 0) {
             printInvalid();
             return;
         }
 
-        String description = line.substring(pos_desc);
+        String description = line.substring(descPos);
         String by, at;
-        Task task = null;
+        Task task;
 
         switch (command) {
         case "todo":
             task = taskManager.addTodo(description);
             break;
         case "deadline":
-            pos_by = description.indexOf("/by");
-            by = description.substring(pos_by + 4);
-            description = description.substring(0, pos_by - 1);
+            byPos = description.indexOf("/by");
+            by = description.substring(byPos + 4);
+            description = description.substring(0, byPos - 1);
             task = taskManager.addDeadline(description, by);
             break;
         case "event":
-            pos_at = description.indexOf("/at");
-            at = description.substring(pos_at + 4);
-            description = description.substring(0, pos_at - 1);
+            atPos = description.indexOf("/at");
+            at = description.substring(atPos + 4);
+            description = description.substring(0, atPos - 1);
             task = taskManager.addEvent(description, at);
             break;
+        default:
+            printInvalid();
+            return;
+        }
 
-        }
         printHorizontalLine();
-        if (task != null) {
-            System.out.println(" Got it. I've added this task:\n  " +
-                    task.toString() +
-                    "\n Now you have " + TaskManager.getTasksCount() +
-                    " tasks in the list.");
-        }
+        System.out.println(" Got it. I've added this task:\n  " +
+                task.toString() +
+                "\n Now you have " + TaskManager.getTasksCount() +
+                " tasks in the list.");
         printHorizontalLine();
     }
 }

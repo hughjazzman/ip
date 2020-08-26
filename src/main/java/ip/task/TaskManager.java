@@ -6,6 +6,7 @@ public class TaskManager {
 
     /**
      * Returns the current task count in the tasks array.
+     *
      * @return Number of tasks.
      */
     public static int getTasksCount() {
@@ -15,7 +16,7 @@ public class TaskManager {
     /**
      * Adds a general Task object to the tasks array.
      *
-     * @param task Task object
+     * @param task Task object.
      * @return the Task object passed in after being added to the array.
      */
     private Task addTask(Task task) {
