@@ -1,15 +1,16 @@
 package ip.task;
 
 public class TaskManager {
-    private Task[] tasks = new Task[100];
-    private static int tasksCount = 0;
+    private static final int MAX_TASKS = 100;
+    private final Task[] tasks = new Task[MAX_TASKS];
+    private int tasksCount = 0;
 
     /**
      * Returns the current task count in the tasks array.
      *
      * @return Number of tasks.
      */
-    public static int getTasksCount() {
+    public int getTasksCount() {
         return tasksCount;
     }
 

@@ -4,6 +4,16 @@ import ip.task.TaskManager;
 import java.util.Scanner;
 
 public class Duke {
+    /** Number of dashes used in printed horizontal line **/
+    private static final int NUM_DASHES = 60;
+    /** Prefix strings that determine the command **/
+    private static final String COMMAND_LIST = "list";
+    private static final String COMMAND_DONE = "done";
+    private static final String COMMAND_BYE = "bye";
+    private static final String COMMAND_TODO = "todo";
+    private static final String COMMAND_DEADLINE = "deadline";
+    private static final String COMMAND_EVENT = "event";
+
     public static void main(String[] args) {
         // Print logo and greeting
         printLogo();
@@ -26,12 +36,8 @@ public class Duke {
         printFarewell();
     }
 
-    private static void printLine(int n) {
-        System.out.println("-".repeat(n));
-    }
-
     private static void printHorizontalLine() {
-        printLine(60);
+        System.out.println("-".repeat(NUM_DASHES));
     }
 
     private static void printLogo() {
@@ -83,18 +89,18 @@ public class Duke {
         String num;
 
         switch (command) {
-        case "list":
+        case COMMAND_LIST:
             printList(taskManager);
             break;
-        case "done":
+        case COMMAND_DONE:
             num = line.substring(spacePos + 1);
             execDone(taskManager, num);
             break;
-        case "bye":
+        case COMMAND_BYE:
             break;
-        case "todo": // Fallthrough
-        case "deadline": // Fallthrough
-        case "event":
+        case COMMAND_TODO: // Fallthrough
+        case COMMAND_DEADLINE: // Fallthrough
+        case COMMAND_EVENT:
             execAddTask(taskManager, command, line);
             break;
         default:
@@ -140,16 +146,16 @@ public class Duke {
         Task task;
 
         switch (command) {
-        case "todo":
+        case COMMAND_TODO:
             task = taskManager.addTodo(description);
             break;
-        case "deadline":
+        case COMMAND_DEADLINE:
             byPos = description.indexOf("/by");
             by = description.substring(byPos + 4);
             description = description.substring(0, byPos - 1);
             task = taskManager.addDeadline(description, by);
             break;
-        case "event":
+        case COMMAND_EVENT:
             atPos = description.indexOf("/at");
             at = description.substring(atPos + 4);
             description = description.substring(0, atPos - 1);
@@ -163,7 +169,7 @@ public class Duke {
         printHorizontalLine();
         System.out.println(" Got it. I've added this task:\n  " +
                 task.toString() +
-                "\n Now you have " + TaskManager.getTasksCount() +
+                "\n Now you have " + taskManager.getTasksCount() +
                 " tasks in the list.");
         printHorizontalLine();
     }
