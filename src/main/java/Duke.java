@@ -29,7 +29,7 @@ public class Duke {
         // Parsing of user input
         do {
             line = in.nextLine();
-            execute(line, taskManager);
+            execute(taskManager, line);
         } while (!line.equals("bye"));
 
         // Exit program
@@ -73,10 +73,10 @@ public class Duke {
     /**
      * Executes appropriate methods based on the given command.
      *
-     * @param line Line of user input.
      * @param taskManager TaskManager object.
+     * @param line Line of user input.
      */
-    private static void execute(String line, TaskManager taskManager) {
+    private static void execute(TaskManager taskManager, String line) {
         // Prevent blank tasks
         if (line.isBlank()) {
             return;

@@ -35,6 +35,7 @@ public class Task {
      * Returns a String representation of the Task, using the statusIcon and description.
      * @return String representation.
      */
+    @Override
     public String toString() {
         return getStatusIcon() + " " + getDescription();
     }
