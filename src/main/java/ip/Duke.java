@@ -1,3 +1,5 @@
+package ip;
+
 import ip.task.Task;
 import ip.task.TaskManager;
 
