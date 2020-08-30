@@ -33,7 +33,7 @@ public class Duke {
         do {
             line = in.nextLine().strip();
             execute(taskManager, line);
-        } while (!line.equals("bye"));
+        } while (!line.equals(COMMAND_BYE));
 
         // Exit program
         printFarewell();
@@ -104,6 +104,13 @@ public class Duke {
         printHorizontalLine();
     }
 
+    private static void printFullTasks() {
+        printHorizontalLine();
+        System.out.println(" Sorry, unable to add any more tasks! The task manager is full. ");
+        printHorizontalLine();
+    }
+
+
     /**
      * Executes appropriate methods based on the given command.
      *
@@ -135,7 +142,11 @@ public class Duke {
         case COMMAND_TODO: // Fallthrough
         case COMMAND_DEADLINE: // Fallthrough
         case COMMAND_EVENT:
-            execAddTask(taskManager, command, line);
+            try {
+                execAddTask(taskManager, command, line);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                printFullTasks();
+            }
             break;
         default:
             printInvalid();
@@ -162,7 +173,7 @@ public class Duke {
         Task task;
         try {
             task = taskManager.markAsDone(id);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             printInvalidTask();
             return;
         }
@@ -206,7 +217,7 @@ public class Duke {
                 String[] details = parseTask(descriptionParam, COMMAND_DEADLINE, PARAM_BY, byPos);
                 by = details[0];
                 description = details[1];
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 return;
             }
 
@@ -218,7 +229,7 @@ public class Duke {
                 String[] details = parseTask(descriptionParam, COMMAND_EVENT, PARAM_AT, atPos);
                 at = details[0];
                 description = details[1];
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 return;
             }
 
@@ -251,17 +262,20 @@ public class Duke {
     private static String parseParam(
             String descriptionParam, String command, String param, int paramPos)
             throws StringIndexOutOfBoundsException {
+
+        // Check that there is a parameter
+        if (paramPos < 0) {
+            printWrongFormatTask(command, param);
+            throw new StringIndexOutOfBoundsException();
+        }
+
         String paramDetails;
+        // Check for blank parameter
         try {
             paramDetails = descriptionParam.substring(paramPos + param.length() + 1).strip();
             return paramDetails;
         } catch (StringIndexOutOfBoundsException e) {
-            // Check that there is a parameter
-            if (paramPos < 0) {
-                printWrongFormatTask(command, param);
-            } else { // Check for blank parameter
-                printEmpty(command + " " + param + " parameter");
-            }
+            printEmpty(command + " " + param + " parameter");
             throw e;
         }
     }
