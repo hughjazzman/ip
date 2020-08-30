@@ -34,7 +34,7 @@ public class TaskManager {
      */
     public Task addTodo(String description) {
         Todo todo = new Todo(description);
-        return this.addTask(todo);
+        return addTask(todo);
     }
 
     /**
@@ -46,7 +46,7 @@ public class TaskManager {
      */
     public Task addDeadline(String description, String by) {
         Deadline deadline = new Deadline(description, by);
-        return this.addTask(deadline);
+        return addTask(deadline);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TaskManager {
      */
     public Task addEvent(String description, String at) {
         Event event = new Event(description, at);
-        return this.addTask(event);
+        return addTask(event);
     }
 
 
