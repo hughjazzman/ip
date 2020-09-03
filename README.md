@@ -15,12 +15,17 @@ Prerequisites: JDK 11, update Intellij to the most recent version.
    1. Click `Open or Import`.
    1. Select the project directory, and click `OK`
    1. If there are any further prompts, accept the defaults.
-1. After the importing is complete, locate the `src/main/java/ip.Duke.java` file, right-click it, and choose `Run ip.Duke.main()`. If the setup is correct, you should see something like the below:
+1. After the importing is complete, locate the `src/main/java/ip.Duke.java` file, right-click it, and choose `Run Duke.main()`. If the setup is correct, you should see something like the below:
    ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
+        ___  ________  ________  ________
+       |\  \|\   __  \|\_____  \|\_____  \
+       \ \  \ \  \|\  \\|___/  /|\|___/  /|
+     __ \ \  \ \   __  \   /  / /    /  / /
+    |\  \\_\  \ \  \ \  \ /  /_/__  /  /_/__
+    \ \________\ \__\ \__\\________\\________\
+     \|________|\|__|\|__|\|_______|\|_______|
+    ------------------------------------------------------------
+     Hey there! The name's Jazz.
+     What can I do for you?
+    ------------------------------------------------------------
    ```
