@@ -1,51 +1,47 @@
 package ip.task;
 
+import ip.file.FileManager;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class TaskManager {
     private static final int MAX_TASKS = 100;
     private final Task[] tasks = new Task[MAX_TASKS];
     private int tasksCount = 0;
+    private FileManager fileManager;
 
-    public TaskManager(String filename) {
-        getValues(filename);
+
+
+    /**
+     * Constructor.
+     *
+     * @param fileManager FileManager of file being parsed by TaskManager.
+     * @throws IOException If an I/O error occurs.
+     */
+    public TaskManager(FileManager fileManager) throws IOException {
+        this.fileManager = fileManager;
+        fileManager.getLines(this, fileManager.getFilePath());
     }
 
-    private void getValues(String filePath) {
-        System.out.println(filePath);
-        FileInputStream stream;
-        try {
-            stream = new FileInputStream(filePath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        ArrayList<String> lines = new ArrayList<>();
-        try {
-            parseLines(reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public FileManager getFileManager() {
+        return fileManager;
     }
 
-    private void parseLines(BufferedReader reader) throws IOException {
-
+    /**
+     * Parses the lines within the file.
+     *
+     * @param reader Reads text from the input stream from the file given in getLines().
+     * @throws IOException If an I/O error occurs.
+     */
+    public void parseLines(BufferedReader reader) throws IOException {
+        // strLine format:
+        // <command> | <isDone> | <description> | <param/optional>
+        // e.g. D | 1 | homework | yesterday
         String strLine;
         while ((strLine = reader.readLine()) != null) {
-            System.out.println(strLine);
+            // Solution below adapted from https://stackoverflow.com/a/41953571
+            // Splits line using "|" and the whitespace surrounding it as the delimiter
             String[] params = strLine.trim().split("\\s*[|]\\s*");
 
             Task task;
@@ -62,12 +58,9 @@ public class TaskManager {
             default:
                 return;
             }
-            System.out.println(params[1].strip());
             if (params[1].strip().equals("1")) {
-                System.out.println("here");
                 task.markAsDone();
             }
-            System.out.println(task.isDone);
         }
     }
 

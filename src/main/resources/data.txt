@@ -1,2 +1,4 @@
 T | 1 | EAT DINNER
 D | 0 | YES | 1pm
+T | 0 | YOLO
+E | 1 | Meet mama | 0 o clock

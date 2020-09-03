@@ -1,8 +1,12 @@
 package ip;
 
+import ip.file.FileManager;
 import ip.task.Task;
 import ip.task.TaskManager;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -10,11 +14,10 @@ import java.util.Scanner;
 public class Duke {
     /** File path **/
     private static final String root = System.getProperty("user.dir");
-    // inserts correct file path separator on *nix and Windows
-    // works on *nix
-    // works on Windows
-    private static Path path = Paths.get(root, "src", "main", "resources", "data.txt");
-    private static boolean directoryExists = java.nio.file.Files.exists(path);
+    // inserts correct file path separator to data.txt file
+    private static final Path filePath = Paths.get(root, "src", "main", "resources", "data.txt");
+    private static final Path dirPath = Paths.get(root, "src", "main", "resources");
+    private static final boolean directoryExists = Files.exists(dirPath);
     /** Number of dashes used in printed horizontal line **/
     private static final int NUM_DASHES = 60;
     /** Prefix strings that determine the command **/
@@ -32,11 +35,16 @@ public class Duke {
         // Print logo and greeting
         printLogo();
         printGreeting();
-//        System.out.println(root);
-//        System.out.println(path);
-//        System.out.println(directoryExists);
+
+        FileManager fileManager = new FileManager(filePath.toString());
         // Create TaskManager
-        TaskManager taskManager = new TaskManager(path.toString());
+        TaskManager taskManager;
+        try {
+            taskManager = createTaskManager(fileManager);
+        } catch (IOException e) {
+            return;
+        }
+
 
         // Scanner class for user input
         String line;
@@ -51,6 +59,38 @@ public class Duke {
         // Exit program
         printFarewell();
     }
+
+    /**
+     * Returns TaskManager object given an input FileManager.
+     *
+     * @param fileManager FileManager of a file.
+     * @return TaskManager object to keep track of tasks.
+     * @throws IOException If an I/O error occurs.
+     */
+    private static TaskManager createTaskManager(FileManager fileManager) throws IOException {
+
+        // Will loop as long as FileNotFoundException is caught
+        while (true) {
+            try {
+                return new TaskManager(fileManager);
+            } catch (FileNotFoundException e) {
+                printFileNotFound();
+                // Create file if not found
+                try {
+                    fileManager.createFile();
+                } catch (IOException err) {
+                    printFileError();
+                    throw err;
+                }
+
+            } catch (IOException e) {
+                printFileError();
+                throw e;
+            }
+        }
+    }
+
+
 
     private static void printHorizontalLine() {
         System.out.println("-".repeat(NUM_DASHES));
@@ -78,6 +118,14 @@ public class Duke {
         printHorizontalLine();
         System.out.println(" Bye. See you next time!");
         printHorizontalLine();
+    }
+
+    private static void printFileNotFound() {
+        System.out.println(" File data.txt not found... Creating new file data.txt.");
+    }
+
+    private static void printFileError() {
+        System.out.println(" Error reading/writing data.txt. Exiting.");
     }
 
     private static void printInvalid() {
@@ -145,13 +193,13 @@ public class Duke {
         switch (command) {
         case COMMAND_LIST:
             printList(taskManager);
-            break;
+            return;
         case COMMAND_DONE:
             num = line.substring(spacePos + 1).strip();
             execDone(taskManager, num);
             break;
         case COMMAND_BYE:
-            break;
+            return;
         case COMMAND_TODO: // Fallthrough
         case COMMAND_DEADLINE: // Fallthrough
         case COMMAND_EVENT:
@@ -165,6 +213,7 @@ public class Duke {
             printInvalid();
             break;
         }
+        // Todo write to file
     }
 
     /**
@@ -298,13 +347,12 @@ public class Duke {
      *
      * @param descriptionParam User input after the command.
      * @param command Command name.
-     * @param param Parameter name.
      * @param paramPos Parameter index in descriptionParam.
      * @return description User input for the command description.
      * @throws StringIndexOutOfBoundsException If paramPos <= 0 (missing description)
      */
     private static String parseDesc(
-            String descriptionParam, String command, String param, int paramPos)
+            String descriptionParam, String command, int paramPos)
             throws StringIndexOutOfBoundsException {
         String description;
         try {
@@ -334,7 +382,7 @@ public class Duke {
         String[] details = new String[2];
 
         paramDetails = parseParam(descriptionParam, command, param, paramPos);
-        description = parseDesc(descriptionParam, command, param, paramPos);
+        description = parseDesc(descriptionParam, command, paramPos);
 
         if (description.isBlank()) {
             printEmpty(command);
