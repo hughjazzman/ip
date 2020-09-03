@@ -10,5 +10,6 @@ deadline do homework /by no idea
 list
 done 1
 done 4
+delete 2
 list
 bye

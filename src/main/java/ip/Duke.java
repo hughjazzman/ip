@@ -15,6 +15,7 @@ public class Duke {
     private static final String COMMAND_TODO = "todo";
     private static final String COMMAND_DEADLINE = "deadline";
     private static final String COMMAND_EVENT = "event";
+    private static final String COMMAND_DELETE = "delete";
     /** Parameters for commands **/
     private static final String PARAM_BY = "/by";
     private static final String PARAM_AT = "/at";
@@ -139,6 +140,9 @@ public class Duke {
             num = line.substring(spacePos + 1).strip();
             execDone(taskManager, num);
             break;
+        case COMMAND_DELETE:
+            num = line.substring(spacePos + 1).strip();
+            execDeleteTask(taskManager, num);
         case COMMAND_BYE:
             break;
         case COMMAND_TODO: // Fallthrough
@@ -146,7 +150,7 @@ public class Duke {
         case COMMAND_EVENT:
             try {
                 execAddTask(taskManager, command, line);
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 printFullTasks();
             }
             break;
@@ -165,6 +169,37 @@ public class Duke {
     private static void execDone(TaskManager taskManager, String num) {
         int id;
 
+        // Check for a valid integer as input
+        try {
+            id = Integer.parseInt(num);
+        } catch (NumberFormatException e) {
+            printWrongFormatInteger();
+            return;
+        }
+
+        Task task;
+        // Check that id is valid
+        try {
+            task = taskManager.markAsDone(id);
+        } catch (IndexOutOfBoundsException e) {
+            printInvalidTask();
+            return;
+        }
+        printHorizontalLine();
+        System.out.println(" Nice! I've marked this task as done:");
+        System.out.println(" " + task.toString());
+        printHorizontalLine();
+    }
+
+    /**
+     * Executes deleting a task
+     *
+     * @param taskManager TaskManager object.
+     * @param num ID number of task in list.
+     */
+    private static void execDeleteTask(TaskManager taskManager, String num) {
+        int id;
+
         try {
             id = Integer.parseInt(num);
         } catch (NumberFormatException e) {
@@ -174,15 +209,17 @@ public class Duke {
 
         Task task;
         try {
-            task = taskManager.markAsDone(id);
-        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            task = taskManager.deleteTask(id);
+        } catch (IndexOutOfBoundsException e) {
             printInvalidTask();
             return;
         }
         printHorizontalLine();
-        System.out.println(" Nice! I've marked this task as done:");
-        System.out.println(" " + task.toString());
+        System.out.println(" Noted. I've removed this task:\n   " +
+                task.toString() + "\n Now you have " +
+                taskManager.getTasksCount() + " tasks in the list.");
         printHorizontalLine();
+
     }
 
     /**
