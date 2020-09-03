@@ -1,9 +1,75 @@
 package ip.task;
 
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class TaskManager {
     private static final int MAX_TASKS = 100;
     private final Task[] tasks = new Task[MAX_TASKS];
     private int tasksCount = 0;
+
+    public TaskManager(String filename) {
+        getValues(filename);
+    }
+
+    private void getValues(String filePath) {
+        System.out.println(filePath);
+        FileInputStream stream;
+        try {
+            stream = new FileInputStream(filePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        ArrayList<String> lines = new ArrayList<>();
+        try {
+            parseLines(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseLines(BufferedReader reader) throws IOException {
+
+        String strLine;
+        while ((strLine = reader.readLine()) != null) {
+            System.out.println(strLine);
+            String[] params = strLine.trim().split("\\s*[|]\\s*");
+
+            Task task;
+            switch (params[0]) {
+            case "T":
+                task = this.addTodo(params[2]);
+                break;
+            case "D":
+                task = this.addDeadline(params[2], params[3]);
+                break;
+            case "E":
+                task = this.addEvent(params[2], params[3]);
+                break;
+            default:
+                return;
+            }
+            System.out.println(params[1].strip());
+            if (params[1].strip().equals("1")) {
+                System.out.println("here");
+                task.markAsDone();
+            }
+            System.out.println(task.isDone);
+        }
+    }
 
     /**
      * Returns the current task count in the tasks array.

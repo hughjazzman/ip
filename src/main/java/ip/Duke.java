@@ -3,9 +3,18 @@ package ip;
 import ip.task.Task;
 import ip.task.TaskManager;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Duke {
+    /** File path **/
+    private static final String root = System.getProperty("user.dir");
+    // inserts correct file path separator on *nix and Windows
+    // works on *nix
+    // works on Windows
+    private static Path path = Paths.get(root, "src", "main", "resources", "data.txt");
+    private static boolean directoryExists = java.nio.file.Files.exists(path);
     /** Number of dashes used in printed horizontal line **/
     private static final int NUM_DASHES = 60;
     /** Prefix strings that determine the command **/
@@ -23,9 +32,11 @@ public class Duke {
         // Print logo and greeting
         printLogo();
         printGreeting();
-
+//        System.out.println(root);
+//        System.out.println(path);
+//        System.out.println(directoryExists);
         // Create TaskManager
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new TaskManager(path.toString());
 
         // Scanner class for user input
         String line;
