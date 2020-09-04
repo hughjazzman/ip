@@ -82,7 +82,6 @@ public class Duke {
                     printFileError();
                     throw err;
                 }
-
             } catch (IOException e) {
                 printFileError();
                 throw e;
@@ -121,7 +120,7 @@ public class Duke {
     }
 
     private static void printFileNotFound() {
-        System.out.println(" File data.txt not found in src/resources... Creating new file data.txt.");
+        System.out.println(" File data.txt not found in src/main/resources... Creating new file data.txt.");
     }
 
     private static void printFileError() {
@@ -211,9 +210,15 @@ public class Duke {
             break;
         default:
             printInvalid();
-            break;
+            return;
         }
-        // Todo write to file
+        // Writes to file
+        try {
+            taskManager.writeToFile();
+        } catch (IOException e) {
+            printFileError();
+        }
+
     }
 
     /**

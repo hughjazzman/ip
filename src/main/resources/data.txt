@@ -1,4 +1,5 @@
 T | 1 | EAT DINNER
-D | 0 | YES | 1pm
+D | 0 | Homework | 2pm
 T | 0 | YOLO
-E | 1 | Meet mama | 0 o clock
+E | 1 | Project meeting | Mon 8pm
+T | 1 | Smile!

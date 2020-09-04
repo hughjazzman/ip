@@ -21,7 +21,7 @@ public class TaskManager {
      */
     public TaskManager(FileManager fileManager) throws IOException {
         this.fileManager = fileManager;
-        fileManager.getLines(this, fileManager.getFilePath());
+        fileManager.getLines(this);
     }
 
     public FileManager getFileManager() {
@@ -70,10 +70,12 @@ public class TaskManager {
      * @throws IOException If an I/O error occurs.
      */
     public void writeToFile() throws IOException {
-        String line, type, isDone, desc, param;
+        StringBuilder lines = new StringBuilder();
+        String type, isDone, desc, param;
         String delimiter = " | ";
         boolean hasParam;
-        for (Task task : tasks) {
+        for (int i = 0; i < tasksCount; i++) {
+            Task task = tasks[i];
             if (task instanceof Todo) {
                 type = "T";
                 desc = task.getDescription();
@@ -93,13 +95,14 @@ public class TaskManager {
                 return;
             }
             isDone = task.isDone() ? "1" : "0";
-            line = type + delimiter + isDone + delimiter + desc;
+            lines.append(type).append(delimiter).append(isDone).append(delimiter).append(desc);
             if (hasParam) {
-                line += delimiter + param;
+                lines.append(delimiter).append(param);
             }
-            line += '\n';
+            lines.append('\n');
         }
-        // Todo write to file with fileManager
+        // Writes to file
+        fileManager.writeFile(lines.toString());
     }
 
     /**

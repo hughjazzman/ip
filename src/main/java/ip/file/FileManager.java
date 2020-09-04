@@ -6,8 +6,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class FileManager {
     private String filePath;
@@ -67,19 +68,15 @@ public class FileManager {
     /**
      * Parses the file from the given filePath.
      *
-     * @param filePath Path to the file as a string.
      * @throws IOException If an I/O error occurs.
      */
     // @@author hughjazzman-reused
     // Reused from https://stackoverflow.com/a/45826710 with minor modifications
-    public void getLines(TaskManager taskManager, String filePath) throws IOException {
+    public void getLines(TaskManager taskManager) throws IOException {
         FileInputStream stream;
-        try {
-            stream = new FileInputStream(filePath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        }
+        
+        stream = new FileInputStream(filePath);
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         try {
             taskManager.parseLines(reader);
@@ -92,6 +89,36 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
+        }
+    }
+    // @@author
+
+    /**
+     * Write the lines as input to the file.
+     *
+     * @param lines Input data being written to file.
+     * @throws IOException If an I/O error occurs.
+     */
+    // @@author hughjazzman-reused
+    // Reused from https://www.journaldev.com/878/java-write-to-file#java-write-to-file-example with minor modifications
+    public void writeFile(String lines) throws IOException {
+        File file = new File(filePath);
+        FileWriter fr = null;
+        try {
+            fr = new FileWriter(file);
+            fr.write(lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            // close resources
+            try {
+                if (fr != null) {
+                    fr.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     // @@author
