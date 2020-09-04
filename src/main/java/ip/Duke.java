@@ -121,7 +121,7 @@ public class Duke {
     }
 
     private static void printFileNotFound() {
-        System.out.println(" File data.txt not found... Creating new file data.txt.");
+        System.out.println(" File data.txt not found in src/resources... Creating new file data.txt.");
     }
 
     private static void printFileError() {

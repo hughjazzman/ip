@@ -65,6 +65,44 @@ public class TaskManager {
     }
 
     /**
+     * Write data to file.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
+    public void writeToFile() throws IOException {
+        String line, type, isDone, desc, param;
+        String delimiter = " | ";
+        boolean hasParam;
+        for (Task task : tasks) {
+            if (task instanceof Todo) {
+                type = "T";
+                desc = task.getDescription();
+                param = "";
+                hasParam = false;
+            } else if (task instanceof Deadline) {
+                type = "D";
+                desc = task.getDescription();
+                param = ((Deadline) task).getBy();
+                hasParam = true;
+            } else if (task instanceof Event) {
+                type = "E";
+                desc = task.getDescription();
+                param = ((Event) task).getAt();
+                hasParam = true;
+            } else {
+                return;
+            }
+            isDone = task.isDone() ? "1" : "0";
+            line = type + delimiter + isDone + delimiter + desc;
+            if (hasParam) {
+                line += delimiter + param;
+            }
+            line += '\n';
+        }
+        // Todo write to file with fileManager
+    }
+
+    /**
      * Returns the current task count in the tasks array.
      *
      * @return Number of tasks.

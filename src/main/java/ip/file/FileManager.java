@@ -44,6 +44,27 @@ public class FileManager {
     // @@author
 
     /**
+     * Creates a directory at filePath.
+     *
+     * @param dirPath Path to directory to be created.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static void createDirectory(String dirPath) throws IOException {
+        // Solution adapted from https://www.javatpoint.com/how-to-create-a-file-in-java
+        File file = new File(dirPath);
+        try {
+            if (file.mkdir()) {
+                System.out.println("Directory created at location: " + file.getCanonicalPath());
+            } else {
+                System.out.println("Directory already exists at location: " + file.getCanonicalPath());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
      * Parses the file from the given filePath.
      *
      * @param filePath Path to the file as a string.
