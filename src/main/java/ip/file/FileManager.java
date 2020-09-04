@@ -74,7 +74,7 @@ public class FileManager {
     // Reused from https://stackoverflow.com/a/45826710 with minor modifications
     public void getLines(TaskManager taskManager) throws IOException {
         FileInputStream stream;
-        
+
         stream = new FileInputStream(filePath);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
