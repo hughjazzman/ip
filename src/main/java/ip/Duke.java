@@ -284,7 +284,7 @@ public class Duke {
                 String[] details = parseTask(descriptionParam, COMMAND_DEADLINE, PARAM_BY, byPos);
                 by = details[0];
                 description = details[1];
-            } catch (RuntimeException e) {
+            } catch (StringIndexOutOfBoundsException | DukeException e) {
                 return;
             }
 
@@ -296,7 +296,7 @@ public class Duke {
                 String[] details = parseTask(descriptionParam, COMMAND_EVENT, PARAM_AT, atPos);
                 at = details[0];
                 description = details[1];
-            } catch (RuntimeException e) {
+            } catch (StringIndexOutOfBoundsException | DukeException e) {
                 return;
             }
 
@@ -328,12 +328,12 @@ public class Duke {
      */
     private static String parseParam(
             String descriptionParam, String command, String param, int paramPos)
-            throws StringIndexOutOfBoundsException {
+            throws StringIndexOutOfBoundsException, DukeException {
 
         // Check that there is a parameter
         if (paramPos < 0) {
             printWrongFormatTask(command, param);
-            throw new StringIndexOutOfBoundsException();
+            throw new DukeException();
         }
 
         String paramDetails;
@@ -378,11 +378,12 @@ public class Duke {
      * @param param Parameter name.
      * @param paramPos Parameter index in descriptionParam.
      * @return details String array of paramDetails and description of task.
-     * @throws RuntimeException If parsed description is blank.
+     * @throws StringIndexOutOfBoundsException If parsed parameter field is blank.
+     * @throws DukeException If parsed description is blank.
      */
     private static String[] parseTask(
             String descriptionParam, String command, String param, int paramPos)
-            throws RuntimeException {
+            throws StringIndexOutOfBoundsException, DukeException {
         String paramDetails, description;
         String[] details = new String[2];
 
@@ -391,7 +392,7 @@ public class Duke {
 
         if (description.isBlank()) {
             printEmpty(command);
-            throw new RuntimeException();
+            throw new DukeException();
         }
 
         details[0] = paramDetails;
