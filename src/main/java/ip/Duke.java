@@ -201,6 +201,7 @@ public class Duke {
         case COMMAND_DELETE:
             num = line.substring(spacePos + 1).strip();
             execDeleteTask(taskManager, num);
+            break;
         case COMMAND_BYE:
             return;
         case COMMAND_TODO: // Fallthrough
@@ -360,8 +361,8 @@ public class Duke {
      * @param param Parameter name.
      * @param paramPos Parameter index in descriptionParam.
      * @return paramDetails User input for the param.
-     * @throws StringIndexOutOfBoundsException If paramPos is < 0 (missing param)
-     *         or paramPos is > descriptionParam.length() (blank param)
+     * @throws DukeException If paramPos is < 0 (missing param)
+     * @throws StringIndexOutOfBoundsException If paramPos is > descriptionParam.length() (blank param)
      */
     private static String parseParam(
             String descriptionParam, String command, String param, int paramPos)

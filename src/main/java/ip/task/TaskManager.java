@@ -105,7 +105,7 @@ public class TaskManager {
     }
 
     private Task getTask(int id) {
-        return tasks.get(id-1);
+        return tasks.get(id);
     }
 
     /**
