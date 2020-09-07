@@ -1,11 +1,109 @@
 package ip.task;
 
+import ip.file.FileManager;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TaskManager {
     private static final int MAX_TASKS = 100;
     private final ArrayList<Task> tasks = new ArrayList<>();
     private int tasksCount = 0;
+    private FileManager fileManager;
+
+
+
+    /**
+     * Constructor.
+     *
+     * @param fileManager FileManager of file being parsed by TaskManager.
+     * @throws IOException If an I/O error occurs.
+     */
+    public TaskManager(FileManager fileManager) throws IOException {
+        this.fileManager = fileManager;
+        fileManager.getLines(this);
+    }
+
+    public FileManager getFileManager() {
+        return fileManager;
+    }
+
+    /**
+     * Parses the lines within the file.
+     *
+     * @param reader Reads text from the input stream from the file given in getLines().
+     * @throws IOException If an I/O error occurs.
+     */
+    public void parseLines(BufferedReader reader) throws IOException {
+        // strLine format:
+        // <command> | <isDone> | <description> | <param/optional>
+        // e.g. D | 1 | homework | yesterday
+        String strLine;
+        while ((strLine = reader.readLine()) != null) {
+            // Solution below adapted from https://stackoverflow.com/a/41953571
+            // Splits line using "|" and the whitespace surrounding it as the delimiter
+            String[] params = strLine.trim().split("\\s*[|]\\s*");
+
+            Task task;
+            switch (params[0]) {
+            case "T":
+                task = this.addTodo(params[2]);
+                break;
+            case "D":
+                task = this.addDeadline(params[2], params[3]);
+                break;
+            case "E":
+                task = this.addEvent(params[2], params[3]);
+                break;
+            default:
+                return;
+            }
+            if (params[1].strip().equals("1")) {
+                task.markAsDone();
+            }
+        }
+    }
+
+    /**
+     * Write data to file.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
+    public void writeToFile() throws IOException {
+        StringBuilder lines = new StringBuilder();
+        String type, isDone, desc, param;
+        String delimiter = " | ";
+        boolean hasParam;
+        for (int i = 0; i < tasksCount; i++) {
+            Task task = tasks[i];
+            if (task instanceof Todo) {
+                type = "T";
+                desc = task.getDescription();
+                param = "";
+                hasParam = false;
+            } else if (task instanceof Deadline) {
+                type = "D";
+                desc = task.getDescription();
+                param = ((Deadline) task).getBy();
+                hasParam = true;
+            } else if (task instanceof Event) {
+                type = "E";
+                desc = task.getDescription();
+                param = ((Event) task).getAt();
+                hasParam = true;
+            } else {
+                return;
+            }
+            isDone = task.isDone() ? "1" : "0";
+            lines.append(type).append(delimiter).append(isDone).append(delimiter).append(desc);
+            if (hasParam) {
+                lines.append(delimiter).append(param);
+            }
+            lines.append('\n');
+        }
+        // Writes to file
+        fileManager.writeFile(lines.toString());
+    }
 
     /**
      * Returns the current task count in the tasks array.
