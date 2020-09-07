@@ -28,6 +28,12 @@ public class TaskManager {
         return task;
     }
 
+    /**
+     * Deletes task based on their id in tasks.
+     *
+     * @param id The id in the tasks list.
+     * @return Task object deleted.
+     */
     public Task deleteTask(int id) {
         Task task = tasks.get(id-1);
         tasks.remove(id-1);
