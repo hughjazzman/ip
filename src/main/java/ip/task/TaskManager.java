@@ -1,13 +1,13 @@
 package ip.task;
 
 import ip.file.FileManager;
-
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TaskManager {
     private static final int MAX_TASKS = 100;
-    private final Task[] tasks = new Task[MAX_TASKS];
+    private final ArrayList<Task> tasks = new ArrayList<>();
     private int tasksCount = 0;
     private FileManager fileManager;
 
@@ -121,8 +121,15 @@ public class TaskManager {
      * @return the Task object passed in after being added to the array.
      */
     private Task addTask(Task task) {
-        tasks[tasksCount] = task;
+        tasks.add(task);
         tasksCount++;
+        return task;
+    }
+
+    public Task deleteTask(int id) {
+        Task task = tasks.get(id-1);
+        tasks.remove(id-1);
+        tasksCount--;
         return task;
     }
 
@@ -169,7 +176,7 @@ public class TaskManager {
      * @return Task object marked as done.
      */
     public Task markAsDone(int id) {
-        Task task = tasks[id-1];
+        Task task = tasks.get(id-1);
         task.markAsDone();
         return task;
     }
@@ -179,7 +186,7 @@ public class TaskManager {
      */
     public void listTasks() {
         for (int i=0;i<tasksCount;i++) {
-            System.out.println(" " + (i+1) + "." + tasks[i].toString() );
+            System.out.println(" " + (i+1) + "." + tasks.get(i).toString() );
         }
     }
 
