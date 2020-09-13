@@ -33,7 +33,7 @@ public class Task {
      * @return Tick symbol if isDone else X symbol.
      */
     public String getStatusIcon() {
-        return isDone ? "[\u2713]" : "[\u2718]"; //return tick or X symbols
+        return isDone ? "[/]" : "[X]"; //return tick or X symbols
     }
 
     /**
