@@ -37,7 +37,13 @@ public class Duke {
         printLogo();
         printGreeting();
 
-        FileManager fileManager = new FileManager(filePath.toString());
+        FileManager fileManager;
+        if (directoryExists) {
+            fileManager = new FileManager(filePath.toString());
+        } else {
+            fileManager = new FileManager("data.txt");
+        }
+
         // Create TaskManager
         TaskManager taskManager;
         try {
