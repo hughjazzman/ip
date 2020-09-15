@@ -3,3 +3,4 @@ D | 0 | Homework | 2pm
 T | 0 | YOLO
 E | 1 | Project meeting | Mon 8pm
 T | 1 | Smile!
+T | 0 | hello
