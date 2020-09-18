@@ -185,7 +185,7 @@ public class TaskManager {
      * @return Task object marked as done.
      */
     public Task markAsDone(int id) {
-        Task task = tasks.get(id-1);
+        Task task = tasks.get(id - 1);
         task.markAsDone();
         return task;
     }
@@ -194,7 +194,7 @@ public class TaskManager {
      * Prints a list of all tasks currently in the tasks array.
      */
     public void listTasks() {
-        for (int i=0;i<tasksCount;i++) {
+        for (int i = 0; i < tasksCount; i++) {
             System.out.println(" " + (i+1) + "." + tasks.get(i).toString() );
         }
     }

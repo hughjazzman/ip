@@ -36,9 +36,7 @@ public class DeleteCommand extends Command {
             ui.printInvalidTask();
             return;
         }
-        System.out.println(" Noted. I've removed this task:\n   " +
-                task.toString() + "\n Now you have " +
-                taskManager.getTasksCount() + " tasks in the list.");
+        ui.printDeleteTask(task, taskManager);
 
     }
 }

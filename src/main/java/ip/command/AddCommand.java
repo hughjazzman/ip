@@ -48,43 +48,40 @@ public class AddCommand extends Command {
         Task task;
 
         switch (command) {
-            case COMMAND_TODO:
-                task = taskManager.addTodo(descriptionParam);
-                break;
-            case COMMAND_DEADLINE:
-                byPos = descriptionParam.indexOf(PARAM_BY);
+        case COMMAND_TODO:
+            task = taskManager.addTodo(descriptionParam);
+            break;
+        case COMMAND_DEADLINE:
+            byPos = descriptionParam.indexOf(PARAM_BY);
 
-                try {
-                    String[] details = Parser.parseTask(descriptionParam, COMMAND_DEADLINE, PARAM_BY, byPos);
-                    by = details[0];
-                    description = details[1];
-                } catch (StringIndexOutOfBoundsException | DukeException e) {
-                    return;
-                }
-
-                task = taskManager.addDeadline(description, by);
-                break;
-            case COMMAND_EVENT:
-                atPos = descriptionParam.indexOf(PARAM_AT);
-                try {
-                    String[] details = Parser.parseTask(descriptionParam, COMMAND_EVENT, PARAM_AT, atPos);
-                    at = details[0];
-                    description = details[1];
-                } catch (StringIndexOutOfBoundsException | DukeException e) {
-                    return;
-                }
-
-                task = taskManager.addEvent(description, at);
-                break;
-            default:
-                ui.printInvalid();
+            try {
+                String[] details = Parser.parseTask(descriptionParam, COMMAND_DEADLINE, PARAM_BY, byPos);
+                by = details[0];
+                description = details[1];
+            } catch (StringIndexOutOfBoundsException | DukeException e) {
                 return;
+            }
+
+            task = taskManager.addDeadline(description, by);
+            break;
+        case COMMAND_EVENT:
+            atPos = descriptionParam.indexOf(PARAM_AT);
+            try {
+                String[] details = Parser.parseTask(descriptionParam, COMMAND_EVENT, PARAM_AT, atPos);
+                at = details[0];
+                description = details[1];
+            } catch (StringIndexOutOfBoundsException | DukeException e) {
+                return;
+            }
+
+            task = taskManager.addEvent(description, at);
+            break;
+        default:
+            ui.printInvalid();
+            return;
         }
 
-        System.out.println(" Got it. I've added this task:\n  " +
-                task.toString() +
-                "\n Now you have " + taskManager.getTasksCount() +
-                " tasks in the list.");
+        ui.printAddedTask(task, taskManager);
     }
 
 

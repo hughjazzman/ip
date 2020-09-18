@@ -5,11 +5,17 @@ import ip.ui.Ui;
 
 public class Parser {
 
-
+    /**
+     * Returns a Command object based on the input line.
+     *
+     * @param line Line of user input.
+     * @return Command object.
+     * @throws DukeException If given line is blank.
+     */
     public static Command parse(String line) throws DukeException {
         // Prevent blank tasks
         if (line.isBlank()) {
-            throw new DukeException();
+            throw new DukeException("Invalid command!");
         }
         // Find position of first space
         int spacePos = line.indexOf(" ");
@@ -33,7 +39,7 @@ public class Parser {
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
         default:
-            throw new DukeException();
+            throw new DukeException("Invalid Command!");
         }
     }
 
@@ -55,7 +61,7 @@ public class Parser {
         // Check that there is a parameter
         if (paramPos < 0) {
             ui.printWrongFormatTask(command, param);
-            throw new DukeException();
+            throw new DukeException("Missing parameter");
         }
 
         String paramDetails;
@@ -116,7 +122,7 @@ public class Parser {
 
         if (description.isBlank()) {
             ui.printEmpty(command);
-            throw new DukeException();
+            throw new DukeException("Missing description");
         }
 
         details[0] = paramDetails;

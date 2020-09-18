@@ -16,25 +16,26 @@ import java.util.Scanner;
 
 public class Duke {
     /** File path **/
-    private static final String root = System.getProperty("user.dir");
+    private static final String ROOT = System.getProperty("user.dir");
+    private static final String FILE_NAME = "data.txt";
     // inserts correct file path separator to data.txt file
-    private static final Path filePath = Paths.get(root, "src", "main", "resources", "data.txt");
-    private static final Path dirPath = Paths.get(root, "src", "main", "resources");
-    private static final boolean directoryExists = Files.exists(dirPath);
-    /** Number of dashes used in printed horizontal line **/
-    private static final int NUM_DASHES = 60;
+    private static final Path FILE_PATH = Paths.get(ROOT, "src", "main", "resources", FILE_NAME);
+    private static final Path DIR_PATH = Paths.get(ROOT, "src", "main", "resources");
+    private static final boolean DIR_EXISTS = Files.exists(DIR_PATH);
 
-
-
-    private Ui ui;
-    private FileManager fileManager;
+    private final Ui ui;
     private TaskManager taskManager;
 
-    public Duke(String filepath) {
-        if (directoryExists) {
-            fileManager = new FileManager(filePath.toString());
-        } else {
-            fileManager = new FileManager("data.txt");
+    /**
+     * Constructor.
+     */
+    public Duke() {
+        // Uses a data.txt file located at src/main/resources if available
+        FileManager fileManager;
+        if (DIR_EXISTS) {
+            fileManager = new FileManager(FILE_PATH.toString());
+        } else { // otherwise just create a data.txt file at the same location as this file
+            fileManager = new FileManager(FILE_NAME);
         }
         ui = new Ui();
         try {
@@ -63,38 +64,7 @@ public class Duke {
     }
 
     public static void main(String[] args) {
-//        // Print logo and greeting
-//        printLogo();
-//        printGreeting();
-        new Duke(filePath.toString()).run();
-//        FileManager fileManager;
-//        if (directoryExists) {
-//            fileManager = new FileManager(filePath.toString());
-//        } else {
-//            fileManager = new FileManager("data.txt");
-//        }
-//
-//        // Create TaskManager
-//        TaskManager taskManager;
-//        try {
-//            taskManager = createTaskManager(fileManager);
-//        } catch (IOException e) {
-//            return;
-//        }
-//
-//
-//        // Scanner class for user input
-//        String line;
-//        Scanner in = new Scanner(System.in);
-//
-//        // Parsing of user input
-//        do {
-//            line = in.nextLine().strip();
-//            execute(taskManager, line);
-//        } while (!line.equals(COMMAND_BYE));
-//
-//        // Exit program
-//        printFarewell();
+        new Duke().run();
     }
 
     /**

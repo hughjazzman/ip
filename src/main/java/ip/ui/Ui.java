@@ -1,5 +1,6 @@
 package ip.ui;
 
+import ip.task.Task;
 import ip.task.TaskManager;
 
 import java.util.Scanner;
@@ -95,8 +96,19 @@ public class Ui {
     }
 
     public void showError(String message) {
-        printHorizontalLine();
         System.out.println(message);
-        printHorizontalLine();
+    }
+
+    public void printAddedTask(Task task, TaskManager taskManager) {
+        System.out.println(" Got it. I've added this task:\n  " +
+                task.toString() +
+                "\n Now you have " + taskManager.getTasksCount() +
+                " tasks in the list.");
+    }
+
+    public void printDeleteTask(Task task, TaskManager taskManager) {
+        System.out.println(" Noted. I've removed this task:\n   " +
+                task.toString() + "\n Now you have " +
+                taskManager.getTasksCount() + " tasks in the list.");
     }
 }
