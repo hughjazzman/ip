@@ -1,29 +1,29 @@
-package ip.command;
+package ip.commands;
 
+import ip.DukeException;
 import ip.task.Task;
 import ip.task.TaskManager;
 import ip.ui.Ui;
 
-public class DoneCommand extends Command {
-    public static final String COMMAND_WORD = "done";
+public class DeleteCommand extends Command {
+    public static final String COMMAND_WORD = "delete";
 
-    private String num;
+    private final String num;
 
-    public DoneCommand(String num) {
+    public DeleteCommand(String num) {
         this.num = num;
     }
 
     /**
-     * Executes marking a task as done
+     * Executes deleting a task
      *
      * @param taskManager TaskManager object.
      * @param ui Ui object.
+     * @throws DukeException If an IO Error occurs.
      */
-    @Override
-    public void execute(TaskManager taskManager, Ui ui) {
+    public void execute(TaskManager taskManager, Ui ui) throws DukeException {
         int id;
 
-        // Check for a valid integer as input
         try {
             id = Integer.parseInt(num);
         } catch (NumberFormatException e) {
@@ -32,14 +32,13 @@ public class DoneCommand extends Command {
         }
 
         Task task;
-        // Check that id is valid
         try {
-            task = taskManager.markAsDone(id);
+            task = taskManager.deleteTask(id);
         } catch (IndexOutOfBoundsException e) {
             ui.printInvalidTask();
             return;
         }
-        System.out.println(" Nice! I've marked this task as done:");
-        System.out.println(" " + task.toString());
+        ui.printDeleteTask(task, taskManager);
+        super.execute(taskManager, ui);
     }
 }

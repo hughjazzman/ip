@@ -18,3 +18,4 @@ text-ui-test/EXPECTED-UNIX.TXT
 /text-ui-test/src/main/resources/data.txt
 
 branch-Level-7
+/src/main/java/META-INF/

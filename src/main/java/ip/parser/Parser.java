@@ -1,9 +1,15 @@
 package ip.parser;
 import ip.DukeException;
-import ip.command.*;
+import ip.commands.AddCommand;
+import ip.commands.Command;
+import ip.commands.DeleteCommand;
+import ip.commands.DoneCommand;
+import ip.commands.ExitCommand;
+import ip.commands.ListCommand;
 import ip.ui.Ui;
 
 public class Parser {
+    private static final Ui ui = new Ui();
 
     /**
      * Returns a Command object based on the input line.
@@ -57,7 +63,6 @@ public class Parser {
     private static String parseParam(
             String descriptionParam, String command, String param, int paramPos)
             throws StringIndexOutOfBoundsException, DukeException {
-        Ui ui = new Ui();
         // Check that there is a parameter
         if (paramPos < 0) {
             ui.printWrongFormatTask(command, param);
@@ -87,7 +92,6 @@ public class Parser {
     private static String parseDesc(
             String descriptionParam, String command, int paramPos)
             throws StringIndexOutOfBoundsException {
-        Ui ui = new Ui();
         String description;
         try {
             description = descriptionParam.substring(0, paramPos - 1).strip();
@@ -110,10 +114,9 @@ public class Parser {
      * @throws StringIndexOutOfBoundsException If parsed parameter field is blank.
      * @throws DukeException If parsed description is blank.
      */
-    public static String[] parseTask(
+    public String[] parseTask(
             String descriptionParam, String command, String param, int paramPos)
             throws StringIndexOutOfBoundsException, DukeException {
-        Ui ui = new Ui();
         String paramDetails, description;
         String[] details = new String[2];
 

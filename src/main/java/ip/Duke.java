@@ -1,18 +1,14 @@
 package ip;
 
-import ip.command.Command;
+import ip.commands.Command;
 import ip.file.FileManager;
 import ip.parser.Parser;
-import ip.task.Task;
 import ip.task.TaskManager;
 import ip.ui.Ui;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 public class Duke {
     /** File path **/
@@ -39,9 +35,9 @@ public class Duke {
         }
         ui = new Ui();
         try {
-            taskManager = createTaskManager(fileManager);
-        } catch (IOException e) {
-            e.printStackTrace();
+            taskManager = TaskManager.createTaskManager(fileManager, ui);
+        } catch (DukeException e) {
+            ui.showError(e.getMessage());
         }
     }
 
@@ -65,35 +61,6 @@ public class Duke {
 
     public static void main(String[] args) {
         new Duke().run();
-    }
-
-    /**
-     * Returns TaskManager object given an input FileManager.
-     *
-     * @param fileManager FileManager of a file.
-     * @return TaskManager object to keep track of tasks.
-     * @throws IOException If an I/O error occurs.
-     */
-    private TaskManager createTaskManager(FileManager fileManager) throws IOException {
-
-        // Will loop as long as FileNotFoundException is caught
-        while (true) {
-            try {
-                return new TaskManager(fileManager);
-            } catch (FileNotFoundException e) {
-                ui.printFileNotFound();
-                // Create file if not found
-                try {
-                    fileManager.createFile();
-                } catch (IOException err) {
-                    ui.printFileError();
-                    throw err;
-                }
-            } catch (IOException e) {
-                ui.printFileError();
-                throw e;
-            }
-        }
     }
 
 }

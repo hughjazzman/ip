@@ -1,4 +1,4 @@
-package ip.command;
+package ip.commands;
 
 import ip.task.TaskManager;
 import ip.ui.Ui;

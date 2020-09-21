@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Ui {
     /** Number of dashes used in printed horizontal line **/
     private static final int NUM_DASHES = 60;
-    private final Scanner in = new Scanner(System.in);
+    private static final Scanner in = new Scanner(System.in);
 
     public String readCommand() {
         return in.nextLine().strip();
@@ -64,13 +64,6 @@ public class Ui {
         printHorizontalLine();
     }
 
-    public void printList(TaskManager taskManager) {
-        printHorizontalLine();
-        System.out.println("Here are the tasks in your list:");
-        taskManager.listTasks();
-        printHorizontalLine();
-    }
-
     public void printWrongFormatInteger() {
         printHorizontalLine();
         System.out.println(" The index of the task must be an integer.");
@@ -110,5 +103,15 @@ public class Ui {
         System.out.println(" Noted. I've removed this task:\n   " +
                 task.toString() + "\n Now you have " +
                 taskManager.getTasksCount() + " tasks in the list.");
+    }
+
+    public void printDoneTask(Task task) {
+        System.out.println(" Nice! I've marked this task as done:");
+        System.out.println(" " + task.toString());
+    }
+
+    public void printListTask(TaskManager taskManager) {
+        System.out.println("Here are the tasks in your list:");
+        taskManager.listTasks();
     }
 }

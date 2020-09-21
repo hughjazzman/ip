@@ -1,26 +1,50 @@
 package ip.task;
 
+import ip.DukeException;
 import ip.file.FileManager;
+import ip.ui.Ui;
+
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class TaskManager {
     private final ArrayList<Task> tasks = new ArrayList<>();
     private int tasksCount = 0;
-    private FileManager fileManager;
-
-
+    private final FileManager fileManager;
 
     /**
      * Constructor.
      *
      * @param fileManager FileManager of file being parsed by TaskManager.
-     * @throws IOException If an I/O error occurs.
+     * @throws DukeException If an I/O error occurs.
+     * @throws FileNotFoundException If the file does not exist at filePath.
      */
-    public TaskManager(FileManager fileManager) throws IOException {
+    public TaskManager(FileManager fileManager) throws FileNotFoundException, DukeException {
         this.fileManager = fileManager;
         fileManager.getLines(this);
+    }
+
+    /**
+     * Returns TaskManager object given an input FileManager.
+     *
+     * @param fileManager FileManager of a file.
+     * @return TaskManager object to keep track of tasks.
+     * @throws DukeException If an I/O error occurs.
+     */
+    public static TaskManager createTaskManager(FileManager fileManager, Ui ui) throws DukeException {
+
+        // Will loop as long as FileNotFoundException is caught
+        while (true) {
+            try {
+                return new TaskManager(fileManager);
+            } catch (FileNotFoundException e) {
+                ui.printFileNotFound();
+                // Create file if not found
+                fileManager.createFile();
+            }
+        }
     }
 
     public FileManager getFileManager() {
@@ -66,39 +90,30 @@ public class TaskManager {
     /**
      * Write data to file.
      *
-     * @throws IOException If an I/O error occurs.
+     * @throws DukeException If an I/O error occurs, or if invalid Task type is parsed.
      */
-    public void writeToFile() throws IOException {
+    public void writeToFile() throws DukeException {
         StringBuilder lines = new StringBuilder();
         String type, isDone, desc, param;
         String delimiter = " | ";
-        boolean hasParam;
         for (int i = 0; i < tasksCount; i++) {
             Task task = getTask(i);
+            desc = task.getDescription();
             if (task instanceof Todo) {
                 type = "T";
-                desc = task.getDescription();
                 param = "";
-                hasParam = false;
             } else if (task instanceof Deadline) {
                 type = "D";
-                desc = task.getDescription();
                 param = ((Deadline) task).getBy();
-                hasParam = true;
             } else if (task instanceof Event) {
                 type = "E";
-                desc = task.getDescription();
                 param = ((Event) task).getAt();
-                hasParam = true;
             } else {
-                return;
+                throw new DukeException("Invalid task type");
             }
             isDone = task.isDone() ? "1" : "0";
-            lines.append(type).append(delimiter).append(isDone).append(delimiter).append(desc);
-            if (hasParam) {
-                lines.append(delimiter).append(param);
-            }
-            lines.append('\n');
+            lines.append(type).append(delimiter).append(isDone).append(delimiter)
+                    .append(desc).append(delimiter).append(param).append('\n');
         }
         // Writes to file
         fileManager.writeFile(lines.toString());
@@ -146,11 +161,11 @@ public class TaskManager {
      * Adds a Todo task to the tasks array.
      *
      * @param description Description of the task.
-     * @return Task object.
+     * @return Todo object.
      */
-    public Task addTodo(String description) {
+    public Todo addTodo(String description) {
         Todo todo = new Todo(description);
-        return addTask(todo);
+        return (Todo) addTask(todo);
     }
 
     /**
@@ -158,11 +173,11 @@ public class TaskManager {
      *
      * @param description Description of the task.
      * @param by Date/Time of the task deadline.
-     * @return Task object.
+     * @return Deadline object.
      */
-    public Task addDeadline(String description, String by) {
+    public Deadline addDeadline(String description, String by) {
         Deadline deadline = new Deadline(description, by);
-        return addTask(deadline);
+        return (Deadline) addTask(deadline);
     }
 
     /**
@@ -170,11 +185,11 @@ public class TaskManager {
      *
      * @param description Description of the task.
      * @param at Location of the task.
-     * @return Task object.
+     * @return Event object.
      */
-    public Task addEvent(String description, String at) {
+    public Event addEvent(String description, String at) {
         Event event = new Event(description, at);
-        return addTask(event);
+        return (Event) addTask(event);
     }
 
 

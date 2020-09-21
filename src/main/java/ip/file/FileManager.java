@@ -1,5 +1,6 @@
 package ip.file;
 
+import ip.DukeException;
 import ip.task.TaskManager;
 
 import java.io.BufferedReader;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class FileManager {
-    private String filePath;
+    private final String filePath;
 
     public FileManager(String filePath) {
         this.filePath = filePath;
@@ -24,21 +25,22 @@ public class FileManager {
     /**
      * Creates a file at filePath.
      *
-     * @throws IOException If an I/O error occurs.
+     * @throws DukeException If an I/O error occurs.
      */
     // @@author hughjazzman-reused
     // Reused from https://www.javatpoint.com/how-to-create-a-file-in-java with minor modifications
-    public void createFile() throws IOException {
+    public void createFile() throws DukeException {
         File file = new File(filePath);
         try {
             if (file.createNewFile()) {
-                System.out.println("File created at location: " + file.getCanonicalPath());
+                // Commented out until testing file creation can be done separately from text-ui-test
+                //System.out.println("File created at location: " + file.getCanonicalPath());
+                System.out.println("File created at location: ");
             } else {
                 System.out.println("File already exists at location: " + file.getCanonicalPath());
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
+            throw new DukeException("IO Error");
         }
 
     }
@@ -48,9 +50,9 @@ public class FileManager {
      * Creates a directory at filePath.
      *
      * @param dirPath Path to directory to be created.
-     * @throws IOException If an I/O error occurs.
+     * @throws DukeException If an I/O error occurs.
      */
-    public static void createDirectory(String dirPath) throws IOException {
+    public static void createDirectory(String dirPath) throws DukeException {
         // Solution adapted from https://www.javatpoint.com/how-to-create-a-file-in-java
         File file = new File(dirPath);
         try {
@@ -60,19 +62,19 @@ public class FileManager {
                 System.out.println("Directory already exists at location: " + file.getCanonicalPath());
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
+            throw new DukeException("IO Error");
         }
     }
 
     /**
      * Parses the file from the given filePath.
      *
-     * @throws IOException If an I/O error occurs.
+     * @throws DukeException If an I/O error occurs.
+     * @throws FileNotFoundException If the file does not exist at filePath.
      */
     // @@author hughjazzman-reused
     // Reused from https://stackoverflow.com/a/45826710 with minor modifications
-    public void getLines(TaskManager taskManager) throws IOException {
+    public void getLines(TaskManager taskManager) throws DukeException, FileNotFoundException {
         FileInputStream stream;
 
         stream = new FileInputStream(filePath);
@@ -81,14 +83,12 @@ public class FileManager {
         try {
             taskManager.parseLines(reader);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
+            throw new DukeException("IO Error");
         }
         try {
             reader.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
+            throw new DukeException("IO Error");
         }
     }
     // @@author
@@ -97,29 +97,18 @@ public class FileManager {
      * Write the lines as input to the file.
      *
      * @param lines Input data being written to file.
-     * @throws IOException If an I/O error occurs.
+     * @throws DukeException If an I/O error occurs.
      */
     // @@author hughjazzman-reused
     // Reused from https://www.journaldev.com/878/java-write-to-file#java-write-to-file-example with minor modifications
-    public void writeFile(String lines) throws IOException {
+    public void writeFile(String lines) throws DukeException {
         File file = new File(filePath);
-        FileWriter fr = null;
-        try {
-            fr = new FileWriter(file);
+        try (FileWriter fr = new FileWriter(file)) {
             fr.write(lines);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            // close resources
-            try {
-                if (fr != null) {
-                    fr.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            throw new DukeException("IO Error");
         }
+        // close resources
     }
     // @@author
 }

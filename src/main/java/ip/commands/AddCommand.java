@@ -1,4 +1,4 @@
-package ip.command;
+package ip.commands;
 
 import ip.DukeException;
 import ip.parser.Parser;
@@ -7,6 +7,7 @@ import ip.task.TaskManager;
 import ip.ui.Ui;
 
 public class AddCommand extends Command {
+    /** Prefix strings that determine the command **/
     public static final String COMMAND_TODO = "todo";
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
@@ -14,13 +15,14 @@ public class AddCommand extends Command {
     private static final String PARAM_BY = "/by";
     private static final String PARAM_AT = "/at";
 
-    private Parser parser;
-    private String command;
-    private String line;
+    private final Parser parser;
+    private final String command;
+    private final String line;
 
     public AddCommand(String command, String line) {
         this.command = command;
         this.line = line;
+        parser = new Parser();
     }
 
 
@@ -29,9 +31,10 @@ public class AddCommand extends Command {
      *
      * @param taskManager TaskManager object.
      * @param ui Ui object.
+     * @throws DukeException If an IO Error occurs.
      */
     @Override
-    public void execute(TaskManager taskManager, Ui ui) {
+    public void execute(TaskManager taskManager, Ui ui) throws DukeException {
         // Position of task description, /by marker, and /at marker
         int descPos = line.indexOf(" "), byPos, atPos;
         String descriptionParam, description;
@@ -55,10 +58,10 @@ public class AddCommand extends Command {
             byPos = descriptionParam.indexOf(PARAM_BY);
 
             try {
-                String[] details = Parser.parseTask(descriptionParam, COMMAND_DEADLINE, PARAM_BY, byPos);
+                String[] details = parser.parseTask(descriptionParam, COMMAND_DEADLINE, PARAM_BY, byPos);
                 by = details[0];
                 description = details[1];
-            } catch (StringIndexOutOfBoundsException | DukeException e) {
+            } catch (StringIndexOutOfBoundsException e) {
                 return;
             }
 
@@ -67,21 +70,21 @@ public class AddCommand extends Command {
         case COMMAND_EVENT:
             atPos = descriptionParam.indexOf(PARAM_AT);
             try {
-                String[] details = Parser.parseTask(descriptionParam, COMMAND_EVENT, PARAM_AT, atPos);
+                String[] details = parser.parseTask(descriptionParam, COMMAND_EVENT, PARAM_AT, atPos);
                 at = details[0];
                 description = details[1];
-            } catch (StringIndexOutOfBoundsException | DukeException e) {
+            } catch (StringIndexOutOfBoundsException e) {
                 return;
             }
 
             task = taskManager.addEvent(description, at);
             break;
         default:
-            ui.printInvalid();
-            return;
+            throw new DukeException("Invalid Command!");
         }
 
         ui.printAddedTask(task, taskManager);
+        super.execute(taskManager, ui);
     }
 
 
