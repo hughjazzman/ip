@@ -12,6 +12,7 @@ public class Event extends Task{
     public Event(String description, String at) {
         super(description);
         this.param = at;
+        setDateTime(at);
     }
 
     public String getAt() {
@@ -19,7 +20,18 @@ public class Event extends Task{
     }
 
     @Override
+    public void setDateTime(String line) {
+        super.setDateTime(line);
+    }
+
+    @Override
     public String toString() {
-        return "[E]" + super.toString() + " (at: " + param + ")";
+        String datetime;
+        if (hasDate && hasTime) {
+            datetime = super.getDateTime();
+        } else {
+            datetime = at;
+        }
+        return "[E]" + super.toString() + " (at: " + datetime + ")";
     }
 }

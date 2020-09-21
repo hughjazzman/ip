@@ -12,6 +12,7 @@ public class Deadline extends Task {
     public Deadline(String description, String by) {
         super(description);
         this.param = by;
+        setDateTime(by);
     }
 
     public String getBy() {
@@ -19,7 +20,18 @@ public class Deadline extends Task {
     }
 
     @Override
+    public void setDateTime(String line) {
+        super.setDateTime(line);
+    }
+
+    @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + param + ")";
+        String datetime;
+        if (hasDate && hasTime) {
+            datetime = super.getDateTime();
+        } else {
+            datetime = by;
+        }
+        return "[D]" + super.toString() + " (by: " + datetime + ")";
     }
 }
