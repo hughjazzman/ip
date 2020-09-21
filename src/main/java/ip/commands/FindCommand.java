@@ -13,7 +13,7 @@ public class FindCommand extends Command {
     private final String line;
 
     public FindCommand(String line) {
-        this.line = line.toLowerCase();
+        this.line = line.strip().toLowerCase();
     }
 
     @Override
