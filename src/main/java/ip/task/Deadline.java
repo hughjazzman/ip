@@ -40,7 +40,7 @@ public class Deadline extends Task {
         if (hasDate && hasTime) {
             datetime = super.getDateTime();
         } else {
-            datetime = by;
+            datetime = param;
         }
         return "[D]" + super.toString() + " (by: " + datetime + ")";
     }

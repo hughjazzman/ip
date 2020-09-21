@@ -168,16 +168,22 @@ public class Ui {
      * @param taskManager TaskManager object containing the Tasks.
      */
     public void printListAllTasks(TaskManager taskManager) {
-        System.out.println(" Here are the tasks in your list:");
+        System.out.println("Here are the tasks in your list:");
         taskManager.listAllTasks();
     }
 
+    /**
+     * Prints all the task in a filtered ArrayList of tasks, based on given description.
+     *
+     * @param tasks Filtered ArrayList of Task objects.
+     * @param desc Description used to filter Task objects.
+     */
     public void printFilterTasks(ArrayList<Task> tasks, String desc) {
         if (tasks.isEmpty()) {
             System.out.println(" No matching tasks in your list (search: " + desc + ")");
             return;
         }
-        System.out.println(" Here are the matching tasks in your list (search: " + desc + "):" );
+        System.out.println("Here are the matching tasks in your list (search: " + desc + "):" );
         int i = 0;
         for (Task t : tasks) {
             System.out.println(" " + (i+1) + "." + tasks.get(i).toString() );

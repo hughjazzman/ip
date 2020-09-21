@@ -12,10 +12,22 @@ public class FindCommand extends Command {
 
     private final String line;
 
+    /**
+     * Constructor.
+     *
+     * @param line User input of keyword(s) to be searched.
+     */
     public FindCommand(String line) {
         this.line = line.strip().toLowerCase();
     }
 
+    /**
+     * Executes the find command, finding all tasks using a keyword.
+     *
+     * @param taskManager TaskManager object.
+     * @param ui Ui object.
+     * @throws DukeException If an I/O error occurs.
+     */
     @Override
     public void execute(TaskManager taskManager, Ui ui) throws DukeException {
         // Position of find description

@@ -40,7 +40,7 @@ public class Event extends Task{
         if (hasDate && hasTime) {
             datetime = super.getDateTime();
         } else {
-            datetime = at;
+            datetime = param;
         }
         return "[E]" + super.toString() + " (at: " + datetime + ")";
     }

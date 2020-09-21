@@ -58,16 +58,31 @@ public class Task {
         return isDone;
     }
 
+    /**
+     * Sets the date of the Task.
+     *
+     * @param date LocalDate object.
+     */
     private void setDate(LocalDate date) {
         this.date = date;
         hasDate = true;
     }
 
+    /**
+     * Sets the time of the Task.
+     *
+     * @param time LocalTime object.
+     */
     private void setTime(LocalTime time) {
         this.time = time;
         hasTime = true;
     }
 
+    /**
+     * Sets the date and time of the Task given user input.
+     *
+     * @param line Line of user input with date and/or time.
+     */
     protected void setDateTime(String line) {
         LocalDate parsedDate = Parser.parseDate(line);
         LocalTime parsedTime = Parser.parseTime(line);
@@ -79,14 +94,30 @@ public class Task {
         }
     }
 
+    /**
+     * Returns a String with formatted date of Task.
+     *
+     * @param format Format of date desired.
+     * @return String formatted date.
+     */
     private String getDateFormat(String format) {
         return hasDate ? date.format(DateTimeFormatter.ofPattern(format)) : "";
     }
 
+    /**
+     * Returns a String with formatted time of Task.
+     *
+     * @return String formatted time to ISO standard.
+     */
     private String getTimeFormat() {
         return hasTime ? time.format(DateTimeFormatter.ISO_LOCAL_TIME) : "";
     }
 
+    /**
+     * Returns a String with date and time of Task.
+     *
+     * @return String of date and time separated by space.
+     */
     protected String getDateTime() {
         String date = getDateFormat("MMM d yyyy");
         String time = getTimeFormat();
