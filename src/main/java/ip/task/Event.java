@@ -15,6 +15,11 @@ public class Event extends Task{
         setDateTime(at);
     }
 
+    /**
+     * Returns the by parameter of the Event.
+     *
+     * @return String of by parameter.
+     */
     public String getAt() {
         return super.getParam();
     }
@@ -24,13 +29,18 @@ public class Event extends Task{
         super.setDateTime(line);
     }
 
+    /**
+     * Returns String representation of Event.
+     *
+     * @return String representation.
+     */
     @Override
     public String toString() {
         String datetime;
         if (hasDate && hasTime) {
             datetime = super.getDateTime();
         } else {
-            datetime = at;
+            datetime = param;
         }
         return "[E]" + super.toString() + " (at: " + datetime + ")";
     }

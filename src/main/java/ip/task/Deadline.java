@@ -15,6 +15,11 @@ public class Deadline extends Task {
         setDateTime(by);
     }
 
+    /**
+     * Returns the by parameter of the Deadline.
+     *
+     * @return String of by parameter.
+     */
     public String getBy() {
         return super.getParam();
     }
@@ -24,13 +29,18 @@ public class Deadline extends Task {
         super.setDateTime(line);
     }
 
+    /**
+     * Returns String representation of Deadline.
+     *
+     * @return String representation.
+     */
     @Override
     public String toString() {
         String datetime;
         if (hasDate && hasTime) {
             datetime = super.getDateTime();
         } else {
-            datetime = by;
+            datetime = param;
         }
         return "[D]" + super.toString() + " (by: " + datetime + ")";
     }

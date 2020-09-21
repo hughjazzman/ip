@@ -48,10 +48,6 @@ public class TaskManager {
         }
     }
 
-    public FileManager getFileManager() {
-        return fileManager;
-    }
-
     /**
      * Parses the lines within the file.
      *

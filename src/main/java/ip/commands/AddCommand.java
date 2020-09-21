@@ -19,6 +19,12 @@ public class AddCommand extends Command {
     private final String command;
     private final String line;
 
+    /**
+     * Constructor
+     *
+     * @param command Task of the AddCommand.
+     * @param line User input.
+     */
     public AddCommand(String command, String line) {
         this.command = command;
         this.line = line;

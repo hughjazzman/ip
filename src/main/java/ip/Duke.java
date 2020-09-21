@@ -18,12 +18,13 @@ public class Duke {
     private static final Path FILE_PATH = Paths.get(ROOT, "src", "main", "resources", FILE_NAME);
     private static final Path DIR_PATH = Paths.get(ROOT, "src", "main", "resources");
     private static final boolean DIR_EXISTS = Files.exists(DIR_PATH);
-
+    /** Instances of class objects for UI and task management **/
     private final Ui ui;
     private TaskManager taskManager;
 
     /**
      * Constructor.
+     * Manages file and storage parsing.
      */
     public Duke() {
         // Uses a data.txt file located at src/main/resources if available
@@ -41,6 +42,10 @@ public class Duke {
         }
     }
 
+    /**
+     * Runs Duke.
+     * Handles commands and UI.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -59,6 +64,11 @@ public class Duke {
         }
     }
 
+    /**
+     * Runs an instance of the Duke application.
+     *
+     * @param args Command line arguments (if any).
+     */
     public static void main(String[] args) {
         new Duke().run();
     }

@@ -10,6 +10,11 @@ public class DeleteCommand extends Command {
 
     private final String num;
 
+    /**
+     * Constructor.
+     *
+     * @param num ID of Task to be deleted.
+     */
     public DeleteCommand(String num) {
         this.num = num;
     }

@@ -14,10 +14,20 @@ import java.io.InputStreamReader;
 public class FileManager {
     private final String filePath;
 
+    /**
+     * Constructor.
+     *
+     * @param filePath Path of file being managed.
+     */
     public FileManager(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Returns the filePath of the FileManager object.
+     *
+     * @return String filePath.
+     */
     public String getFilePath() {
         return filePath;
     }
