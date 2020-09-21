@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 public class Task {
 
     protected String description;
+
+    protected String param;
     protected boolean isDone;
 
     protected LocalDate date;
@@ -26,8 +28,13 @@ public class Task {
         this.isDone = false;
     }
 
+
     public String getDescription() {
         return description;
+    }
+
+    protected String getParam() {
+        return param;
     }
 
     public void markAsDone() {

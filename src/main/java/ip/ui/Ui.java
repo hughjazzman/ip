@@ -3,6 +3,7 @@ package ip.ui;
 import ip.task.Task;
 import ip.task.TaskManager;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
@@ -110,8 +111,22 @@ public class Ui {
         System.out.println(" " + task.toString());
     }
 
-    public void printListTask(TaskManager taskManager) {
-        System.out.println("Here are the tasks in your list:");
-        taskManager.listTasks();
+    public void printListAllTasks(TaskManager taskManager) {
+        System.out.println(" Here are the tasks in your list:");
+        taskManager.listAllTasks();
+    }
+
+    public void printFilterTasks(ArrayList<Task> tasks, String desc) {
+        if (tasks.isEmpty()) {
+            System.out.println(" No matching tasks in your list (search: " + desc + ")");
+            return;
+        }
+        System.out.println(" Here are the matching tasks in your list (search: " + desc + "):" );
+        int i = 0;
+        for (Task t : tasks) {
+            System.out.println(" " + (i+1) + "." + tasks.get(i).toString() );
+            i++;
+        }
+
     }
 }
