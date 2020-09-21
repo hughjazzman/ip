@@ -3,6 +3,8 @@ package ip.task;
 public class Task {
 
     protected String description;
+
+    protected String param;
     protected boolean isDone;
 
     /**
@@ -15,8 +17,13 @@ public class Task {
         this.isDone = false;
     }
 
+
     public String getDescription() {
         return description;
+    }
+
+    protected String getParam() {
+        return param;
     }
 
     public void markAsDone() {

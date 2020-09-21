@@ -2,7 +2,6 @@ package ip.task;
 
 public class Event extends Task{
 
-    protected String at;
 
     /**
      * Constructor
@@ -12,15 +11,15 @@ public class Event extends Task{
      */
     public Event(String description, String at) {
         super(description);
-        this.at = at;
+        this.param = at;
     }
 
     public String getAt() {
-        return at;
+        return super.getParam();
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (at: " + at + ")";
+        return "[E]" + super.toString() + " (at: " + param + ")";
     }
 }

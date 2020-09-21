@@ -9,6 +9,6 @@ public class ListCommand extends Command {
 
     @Override
     public void execute(TaskManager taskManager, Ui ui) {
-        ui.printListTask(taskManager);
+        ui.printListAllTasks(taskManager);
     }
 }

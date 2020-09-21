@@ -5,6 +5,7 @@ import ip.commands.Command;
 import ip.commands.DeleteCommand;
 import ip.commands.DoneCommand;
 import ip.commands.ExitCommand;
+import ip.commands.FindCommand;
 import ip.commands.ListCommand;
 import ip.ui.Ui;
 
@@ -44,6 +45,8 @@ public class Parser {
             return new ListCommand();
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
+        case FindCommand.COMMAND_WORD:
+            return new FindCommand(line);
         default:
             throw new DukeException("Invalid Command!");
         }
