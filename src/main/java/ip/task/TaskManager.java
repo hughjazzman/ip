@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class TaskManager {
     private final ArrayList<Task> tasks = new ArrayList<>();
@@ -204,11 +205,23 @@ public class TaskManager {
     /**
      * Prints a list of all tasks currently in the tasks array.
      */
-    public void listTasks() {
+    public void listAllTasks() {
         for (int i = 0; i < tasksCount; i++) {
             System.out.println(" " + (i+1) + "." + tasks.get(i).toString() );
         }
     }
 
+
+    /**
+     * Returns an ArrayList of Tasks filtered by description.
+     *
+     * @param line Input to filter by.
+     * @return ArrayList of filtered Tasks.
+     */
+    public ArrayList<Task> findTasksByDesc(String line) {
+        return (ArrayList<Task>) tasks.stream()
+                .filter(t -> t.description.toLowerCase().contains(line))
+                .collect(Collectors.toList());
+    }
 
 }

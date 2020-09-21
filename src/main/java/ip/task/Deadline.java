@@ -2,7 +2,6 @@ package ip.task;
 
 public class Deadline extends Task {
 
-    protected String by;
 
     /**
      * Constructor.
@@ -12,7 +11,8 @@ public class Deadline extends Task {
      */
     public Deadline(String description, String by) {
         super(description);
-        this.by = by;
+        this.param = by;
+        setDateTime(by);
     }
 
     /**
@@ -21,7 +21,12 @@ public class Deadline extends Task {
      * @return String of by parameter.
      */
     public String getBy() {
-        return by;
+        return super.getParam();
+    }
+
+    @Override
+    public void setDateTime(String line) {
+        super.setDateTime(line);
     }
 
     /**
@@ -31,6 +36,12 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        String datetime;
+        if (hasDate && hasTime) {
+            datetime = super.getDateTime();
+        } else {
+            datetime = by;
+        }
+        return "[D]" + super.toString() + " (by: " + datetime + ")";
     }
 }

@@ -2,7 +2,6 @@ package ip.task;
 
 public class Event extends Task{
 
-    protected String at;
 
     /**
      * Constructor
@@ -12,7 +11,8 @@ public class Event extends Task{
      */
     public Event(String description, String at) {
         super(description);
-        this.at = at;
+        this.param = at;
+        setDateTime(at);
     }
 
     /**
@@ -21,7 +21,12 @@ public class Event extends Task{
      * @return String of by parameter.
      */
     public String getAt() {
-        return at;
+        return super.getParam();
+    }
+
+    @Override
+    public void setDateTime(String line) {
+        super.setDateTime(line);
     }
 
     /**
@@ -31,6 +36,12 @@ public class Event extends Task{
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (at: " + at + ")";
+        String datetime;
+        if (hasDate && hasTime) {
+            datetime = super.getDateTime();
+        } else {
+            datetime = at;
+        }
+        return "[E]" + super.toString() + " (at: " + datetime + ")";
     }
 }

@@ -1,9 +1,22 @@
 package ip.task;
 
+import ip.parser.Parser;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Task {
 
     protected String description;
+
+    protected String param;
     protected boolean isDone;
+
+    protected LocalDate date;
+    protected LocalTime time;
+    protected boolean hasDate = false;
+    protected boolean hasTime = false;
 
     /**
      * Constructor
@@ -24,6 +37,11 @@ public class Task {
         return description;
     }
 
+    
+    protected String getParam() {
+        return param;
+    }
+
     /**
      * Marks a Task as done.
      */
@@ -38,6 +56,41 @@ public class Task {
      */
     public boolean isDone() {
         return isDone;
+    }
+
+    private void setDate(LocalDate date) {
+        this.date = date;
+        hasDate = true;
+    }
+
+    private void setTime(LocalTime time) {
+        this.time = time;
+        hasTime = true;
+    }
+
+    protected void setDateTime(String line) {
+        LocalDate parsedDate = Parser.parseDate(line);
+        LocalTime parsedTime = Parser.parseTime(line);
+        if (parsedDate != null) {
+            setDate(parsedDate);
+        }
+        if (parsedTime != null) {
+            setTime(parsedTime);
+        }
+    }
+
+    private String getDateFormat(String format) {
+        return hasDate ? date.format(DateTimeFormatter.ofPattern(format)) : "";
+    }
+
+    private String getTimeFormat() {
+        return hasTime ? time.format(DateTimeFormatter.ISO_LOCAL_TIME) : "";
+    }
+
+    protected String getDateTime() {
+        String date = getDateFormat("MMM d yyyy");
+        String time = getTimeFormat();
+        return date + " " + time;
     }
 
     /**

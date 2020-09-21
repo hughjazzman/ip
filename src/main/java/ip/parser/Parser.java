@@ -1,12 +1,18 @@
 package ip.parser;
+
 import ip.DukeException;
 import ip.commands.AddCommand;
 import ip.commands.Command;
 import ip.commands.DeleteCommand;
 import ip.commands.DoneCommand;
 import ip.commands.ExitCommand;
+import ip.commands.FindCommand;
 import ip.commands.ListCommand;
 import ip.ui.Ui;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 public class Parser {
     private static final Ui ui = new Ui();
@@ -44,6 +50,8 @@ public class Parser {
             return new ListCommand();
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
+        case FindCommand.COMMAND_WORD:
+            return new FindCommand(line);
         default:
             throw new DukeException("Invalid Command!");
         }
@@ -134,4 +142,43 @@ public class Parser {
         return details;
 
     }
+
+
+    /**
+     * Returns a LocalDate object parsed from an input line.
+     *
+     * @param line Line of user input.
+     * @return LocalDate object parsed.
+     */
+    public static LocalDate parseDate(String line) {
+        String[] params = line.split("\\s+");
+        LocalDate date = null;
+        for (String s : params) {
+            try {
+                date = LocalDate.parse(s);
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+        return date;
+    }
+
+    /**
+     * Returns a LocalTime object parsed from an input line.
+     *
+     * @param line Line of user input.
+     * @return LocalTime object parsed.
+     */
+    public static LocalTime parseTime(String line) {
+        String[] params = line.split("\\s+");
+        LocalTime time = null;
+        for (String s : params) {
+            try {
+                time = LocalTime.parse(s);
+            } catch (DateTimeParseException ignored) {
+            }
+
+        }
+        return time;
+    }
+
 }
