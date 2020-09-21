@@ -35,7 +35,7 @@ public class FileManager {
             if (file.createNewFile()) {
                 // Commented out until testing file creation can be done separately from text-ui-test
                 //System.out.println("File created at location: " + file.getCanonicalPath());
-                System.out.println("File created at location: ");
+                System.out.println("File created at location:");
             } else {
                 System.out.println("File already exists at location: " + file.getCanonicalPath());
             }
