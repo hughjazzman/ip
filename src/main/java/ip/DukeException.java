@@ -8,6 +8,11 @@ public class DukeException extends Exception {
         this.message = s;
     }
 
+    /**
+     * Returns message in Exception as a String.
+     *
+     * @return String message for the Exception.
+     */
     @Override
     public String getMessage() {
         return message;

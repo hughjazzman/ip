@@ -15,10 +15,20 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /**
+     * Returns the by parameter of the Deadline.
+     *
+     * @return String of by parameter.
+     */
     public String getBy() {
         return by;
     }
 
+    /**
+     * Returns String representation of Deadline.
+     *
+     * @return String representation.
+     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by + ")";

@@ -10,13 +10,25 @@ public class Ui {
     private static final int NUM_DASHES = 60;
     private static final Scanner in = new Scanner(System.in);
 
+    /**
+     * Returns the next line of user input.
+     *
+     * @return String of user input.
+     */
     public String readCommand() {
         return in.nextLine().strip();
     }
+
+    /**
+     * Prints horizontal line as a marker between inputs.
+     */
     public void printHorizontalLine() {
         System.out.println("-".repeat(NUM_DASHES));
     }
 
+    /**
+     * Prints Duke logo - JAZZ.
+     */
     private void printLogo() {
         System.out.println(
                 "    ___  ________  ________  ________\n" +
@@ -28,6 +40,9 @@ public class Ui {
                         " \\|________|\\|__|\\|__|\\|_______|\\|_______|");
     }
 
+    /**
+     * Prints greeting to Duke.
+     */
     private void printGreeting() {
         printHorizontalLine();
         System.out.println(" Hey there! The name's Jazz.\n" +
@@ -35,63 +50,87 @@ public class Ui {
         printHorizontalLine();
     }
 
+    /**
+     * Prints logo and greeting for Duke.
+     */
     public void showWelcome() {
         printLogo();
         printGreeting();
     }
 
+    /**
+     * Prints farewell message after exiting Duke.
+     */
     public void printFarewell() {
         System.out.println(" Bye. See you next time!");
     }
 
+    /**
+     * Prints that the file is not found.
+     */
     public void printFileNotFound() {
         System.out.println(" File data.txt not found in src/main/resources... Creating new file data.txt.");
     }
 
-    public void printFileError() {
-        System.out.println(" Error reading/writing data.txt. Exiting.");
-    }
-
+    /**
+     * Prints that invalid input has been received.
+     */
     public void printInvalid() {
         printHorizontalLine();
         System.out.println(" ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
         printHorizontalLine();
     }
 
+    /**
+     * Prints that a command has an empty parameter.
+     *
+     * @param command Command that has the empty parameter.
+     */
     public void printEmpty(String command) {
         printHorizontalLine();
         System.out.println(" ☹ OOPS!!! The description of a " + command + " cannot be empty.");
         printHorizontalLine();
     }
 
+    /**
+     * Prints that the index of the task must be an integer.
+     */
     public void printWrongFormatInteger() {
-        printHorizontalLine();
         System.out.println(" The index of the task must be an integer.");
-        printHorizontalLine();
     }
 
+    /**
+     * Prints that a task has the wrong format.
+     *
+     * @param command Command that has wrong format.
+     * @param parameter Parameter which is missing.
+     */
     public void printWrongFormatTask(String command, String parameter) {
-        printHorizontalLine();
         System.out.println(" " + command + " requires the " + parameter + " parameter");
-        printHorizontalLine();
     }
 
+    /**
+     * Prints that a Task ID does not exist.
+     */
     public void printInvalidTask() {
-        printHorizontalLine();
         System.out.println(" The task ID does not exist!");
-        printHorizontalLine();
     }
 
-    public void printFullTasks() {
-        printHorizontalLine();
-        System.out.println(" Sorry, unable to add any more tasks! The task manager is full. ");
-        printHorizontalLine();
-    }
-
+    /**
+     * Prints a message.
+     *
+     * @param message Message.
+     */
     public void showError(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Prints that a Task has been added.
+     *
+     * @param task Task object that was added.
+     * @param taskManager TaskManager object to obtain taskCount.
+     */
     public void printAddedTask(Task task, TaskManager taskManager) {
         System.out.println(" Got it. I've added this task:\n  " +
                 task.toString() +
@@ -99,17 +138,33 @@ public class Ui {
                 " tasks in the list.");
     }
 
+    /**
+     * Prints that a Task has been deleted.
+     *
+     * @param task Task object that was deleted.
+     * @param taskManager TaskManager object to obtain taskCount.
+     */
     public void printDeleteTask(Task task, TaskManager taskManager) {
         System.out.println(" Noted. I've removed this task:\n   " +
                 task.toString() + "\n Now you have " +
                 taskManager.getTasksCount() + " tasks in the list.");
     }
 
+    /**
+     * Prints that a Task is marked as done.
+     *
+     * @param task Task object marked as done.
+     */
     public void printDoneTask(Task task) {
         System.out.println(" Nice! I've marked this task as done:");
         System.out.println(" " + task.toString());
     }
 
+    /**
+     * Prints all the Tasks in the TaskManager.
+     *
+     * @param taskManager TaskManager object containing the Tasks.
+     */
     public void printListTask(TaskManager taskManager) {
         System.out.println("Here are the tasks in your list:");
         taskManager.listTasks();

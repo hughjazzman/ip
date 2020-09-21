@@ -10,6 +10,11 @@ public class DoneCommand extends Command {
 
     private String num;
 
+    /**
+     * Constructor.
+     *
+     * @param num ID of task to mark as done.
+     */
     public DoneCommand(String num) {
         this.num = num;
     }

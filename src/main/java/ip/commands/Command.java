@@ -7,6 +7,7 @@ import ip.ui.Ui;
 import java.io.IOException;
 
 public class Command {
+    /** boolean whether the command is to exit **/
     protected boolean isExit;
 
     /**
@@ -20,15 +21,12 @@ public class Command {
         taskManager.writeToFile();
     }
 
+    /**
+     * Returns boolean isExit.
+     *
+     * @return boolean isExit whether the command is to exit.
+     */
     public boolean isExit() {
         return isExit;
     }
-
-
-
-
-
-
-
-
 }

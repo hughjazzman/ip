@@ -15,10 +15,20 @@ public class Event extends Task{
         this.at = at;
     }
 
+    /**
+     * Returns the by parameter of the Event.
+     *
+     * @return String of by parameter.
+     */
     public String getAt() {
         return at;
     }
 
+    /**
+     * Returns String representation of Event.
+     *
+     * @return String representation.
+     */
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (at: " + at + ")";
