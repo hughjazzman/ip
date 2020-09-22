@@ -8,14 +8,14 @@ import ip.ui.Ui;
 public class DeleteCommand extends Command {
     public static final String COMMAND_WORD = "delete";
 
-    private final String num;
+    private final int num;
 
     /**
      * Constructor.
      *
      * @param num ID of Task to be deleted.
      */
-    public DeleteCommand(String num) {
+    public DeleteCommand(int num) {
         this.num = num;
     }
 
@@ -27,22 +27,14 @@ public class DeleteCommand extends Command {
      * @throws DukeException If an IO Error occurs.
      */
     public void execute(TaskManager taskManager, Ui ui) throws DukeException {
-        int id;
-
-        try {
-            id = Integer.parseInt(num);
-        } catch (NumberFormatException e) {
-            ui.printWrongFormatInteger();
-            return;
-        }
-
         Task task;
         try {
-            task = taskManager.deleteTask(id);
+            task = taskManager.deleteTask(num);
         } catch (IndexOutOfBoundsException e) {
             ui.printInvalidTask();
             return;
         }
+
         ui.printDeleteTask(task, taskManager);
         super.execute(taskManager, ui);
     }

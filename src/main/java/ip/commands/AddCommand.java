@@ -1,7 +1,6 @@
 package ip.commands;
 
 import ip.DukeException;
-import ip.parser.Parser;
 import ip.task.Task;
 import ip.task.TaskManager;
 import ip.ui.Ui;
@@ -12,23 +11,34 @@ public class AddCommand extends Command {
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
     /** Parameters for commands **/
-    private static final String PARAM_BY = "/by";
-    private static final String PARAM_AT = "/at";
+    public static final String PARAM_BY = "/by";
+    public static final String PARAM_AT = "/at";
 
-    private final Parser parser;
     private final String command;
-    private final String line;
+    private final String description;
+    private final String param;
 
     /**
      * Constructor
      *
      * @param command Task of the AddCommand.
-     * @param line User input.
+     * @param description Description of task.
+     * @param param Parameter of task (if any).
      */
-    public AddCommand(String command, String line) {
+    public AddCommand(String command, String description, String param) {
         this.command = command;
-        this.line = line;
-        parser = new Parser();
+        this.description = description;
+        this.param = param;
+    }
+
+    /**
+     * Overloaded Constructor.
+     *
+     * @param command Task of the AddCommand.
+     * @param description Description of task.
+     */
+    public AddCommand(String command, String description) {
+        this(command, description, "");
     }
 
 
@@ -41,49 +51,16 @@ public class AddCommand extends Command {
      */
     @Override
     public void execute(TaskManager taskManager, Ui ui) throws DukeException {
-        // Position of task description, /by marker, and /at marker
-        int descPos = line.indexOf(" "), byPos, atPos;
-        String descriptionParam, description;
-
-        // Check for blank description
-        try {
-            descriptionParam = line.substring(descPos).strip();
-        } catch (StringIndexOutOfBoundsException e) {
-            ui.printEmpty(command);
-            return;
-        }
-
-        String by, at;
         Task task;
-
         switch (command) {
         case COMMAND_TODO:
-            task = taskManager.addTodo(descriptionParam);
+            task = taskManager.addTodo(description);
             break;
         case COMMAND_DEADLINE:
-            byPos = descriptionParam.indexOf(PARAM_BY);
-
-            try {
-                String[] details = parser.parseTask(descriptionParam, COMMAND_DEADLINE, PARAM_BY, byPos);
-                by = details[0];
-                description = details[1];
-            } catch (StringIndexOutOfBoundsException e) {
-                return;
-            }
-
-            task = taskManager.addDeadline(description, by);
+            task = taskManager.addDeadline(description, param);
             break;
         case COMMAND_EVENT:
-            atPos = descriptionParam.indexOf(PARAM_AT);
-            try {
-                String[] details = parser.parseTask(descriptionParam, COMMAND_EVENT, PARAM_AT, atPos);
-                at = details[0];
-                description = details[1];
-            } catch (StringIndexOutOfBoundsException e) {
-                return;
-            }
-
-            task = taskManager.addEvent(description, at);
+            task = taskManager.addEvent(description, param);
             break;
         default:
             throw new DukeException("Invalid Command!");

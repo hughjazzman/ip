@@ -8,14 +8,14 @@ import ip.ui.Ui;
 public class DoneCommand extends Command {
     public static final String COMMAND_WORD = "done";
 
-    private String num;
+    private final int num;
 
     /**
      * Constructor.
      *
      * @param num ID of task to mark as done.
      */
-    public DoneCommand(String num) {
+    public DoneCommand(int num) {
         this.num = num;
     }
 
@@ -28,27 +28,16 @@ public class DoneCommand extends Command {
      */
     @Override
     public void execute(TaskManager taskManager, Ui ui) throws DukeException {
-        int id;
-
-        // Check for a valid integer as input
-        try {
-            id = Integer.parseInt(num);
-        } catch (NumberFormatException e) {
-            ui.printWrongFormatInteger();
-            return;
-        }
-
         Task task;
         // Check that id is valid
         try {
-            task = taskManager.markAsDone(id);
+            task = taskManager.markAsDone(num);
         } catch (IndexOutOfBoundsException e) {
             ui.printInvalidTask();
             return;
         }
 
         ui.printDoneTask(task);
-
         super.execute(taskManager, ui);
     }
 }

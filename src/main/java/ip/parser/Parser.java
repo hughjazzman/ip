@@ -39,22 +39,115 @@ public class Parser {
         case AddCommand.COMMAND_TODO: // Fallthrough
         case AddCommand.COMMAND_DEADLINE: // Fallthrough
         case AddCommand.COMMAND_EVENT:
-            return new AddCommand(commandWord, line);
-        case DeleteCommand.COMMAND_WORD:
-            num = line.substring(spacePos + 1).strip();
-            return new DeleteCommand(num);
+            return prepareAdd(commandWord, line);
+        case DeleteCommand.COMMAND_WORD: // Fallthrough
         case DoneCommand.COMMAND_WORD:
             num = line.substring(spacePos + 1).strip();
-            return new DoneCommand(num);
+            return prepareIndex(commandWord, num);
         case ListCommand.COMMAND_WORD:
             return new ListCommand();
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
         case FindCommand.COMMAND_WORD:
-            return new FindCommand(line);
+            String desc = prepareDesc(commandWord, line);
+            return new FindCommand(desc);
         default:
             throw new DukeException("Invalid Command!");
         }
+    }
+
+    /**
+     * Returns AddCommand object after parsing command to add Task.
+     *
+     * @param command Task to be added.
+     * @param line Line of user input.
+     * @return AddCommand object to be executed.
+     * @throws DukeException If the description/param is blank.
+     */
+    private static AddCommand prepareAdd(String command, String line) throws DukeException {
+        // Position of task description, /by marker, and /at marker
+        int byPos, atPos;
+        String descriptionParam, description;
+
+        // Check for blank description
+        descriptionParam = prepareDesc(command, line);
+
+        String by, at;
+        String[] details;
+
+        switch (command) {
+        case AddCommand.COMMAND_TODO:
+            return new AddCommand(command, descriptionParam);
+        case AddCommand.COMMAND_DEADLINE:
+            byPos = descriptionParam.indexOf(AddCommand.PARAM_BY);
+
+            details = parseTask(descriptionParam, command, AddCommand.PARAM_BY, byPos);
+            by = details[0];
+            description = details[1];
+
+            return new AddCommand(command, description, by);
+        case AddCommand.COMMAND_EVENT:
+            atPos = descriptionParam.indexOf(AddCommand.PARAM_AT);
+
+            details = parseTask(descriptionParam, command, AddCommand.PARAM_AT, atPos);
+            at = details[0];
+            description = details[1];
+
+            return new AddCommand(command, description, at);
+        default:
+            throw new DukeException("Invalid Command!");
+        }
+    }
+
+    /**
+     * Returns Command object after parsing command that deals with task index.
+     *
+     * @param command Command to be executed.
+     * @param num Task index number.
+     * @return Command object.
+     * @throws DukeException If the number is in a wrong format, or task index does not exist.
+     */
+    private static Command prepareIndex(String command, String num) throws DukeException {
+        int id;
+
+        try {
+            id = Integer.parseInt(num);
+        } catch (NumberFormatException e) {
+            ui.printWrongFormatInteger();
+            throw new DukeException("");
+        }
+
+        switch (command) {
+        case "delete":
+            return new DeleteCommand(id);
+        case "done":
+            return new DoneCommand(id);
+        default:
+            throw new DukeException("Invalid Command!");
+        }
+    }
+
+    /**
+     * Returns parsed description of a command.
+     *
+     * @param command Command to be executed.
+     * @param line Line of user input.
+     * @return String of parsed description.
+     * @throws DukeException If the description is blank.
+     */
+    private static String prepareDesc(String command, String line) throws DukeException {
+        // Position of find description
+        int descPos = line.indexOf(" ");
+        String description;
+
+        // Check for blank description
+        try {
+            description = line.substring(descPos).strip();
+        } catch (StringIndexOutOfBoundsException e) {
+            ui.printEmpty(command);
+            throw new DukeException("");
+        }
+        return description.strip();
     }
 
     /**
@@ -70,7 +163,7 @@ public class Parser {
      */
     private static String parseParam(
             String descriptionParam, String command, String param, int paramPos)
-            throws StringIndexOutOfBoundsException, DukeException {
+            throws DukeException {
         // Check that there is a parameter
         if (paramPos < 0) {
             ui.printWrongFormatTask(command, param);
@@ -84,7 +177,7 @@ public class Parser {
             return paramDetails;
         } catch (StringIndexOutOfBoundsException e) {
             ui.printEmpty(command + " " + param + " parameter");
-            throw e;
+            throw new DukeException("");
         }
     }
 
@@ -95,18 +188,18 @@ public class Parser {
      * @param command Command name.
      * @param paramPos Parameter index in descriptionParam.
      * @return description User input for the command description.
-     * @throws StringIndexOutOfBoundsException If paramPos <= 0 (missing description)
+     * @throws DukeException If paramPos <= 0 (missing description)
      */
     private static String parseDesc(
             String descriptionParam, String command, int paramPos)
-            throws StringIndexOutOfBoundsException {
+            throws DukeException {
         String description;
         try {
             description = descriptionParam.substring(0, paramPos - 1).strip();
             return description;
         } catch (StringIndexOutOfBoundsException e) {
             ui.printEmpty(command);
-            throw e;
+            throw new DukeException("");
         }
     }
 
@@ -122,9 +215,9 @@ public class Parser {
      * @throws StringIndexOutOfBoundsException If parsed parameter field is blank.
      * @throws DukeException If parsed description is blank.
      */
-    public String[] parseTask(
+    private static String[] parseTask(
             String descriptionParam, String command, String param, int paramPos)
-            throws StringIndexOutOfBoundsException, DukeException {
+            throws DukeException {
         String paramDetails, description;
         String[] details = new String[2];
 

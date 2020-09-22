@@ -10,15 +10,15 @@ import java.util.ArrayList;
 public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
-    private final String line;
+    private final String description;
 
     /**
      * Constructor.
      *
-     * @param line User input of keyword(s) to be searched.
+     * @param description User input of keyword(s) to be searched.
      */
-    public FindCommand(String line) {
-        this.line = line.strip().toLowerCase();
+    public FindCommand(String description) {
+        this.description = description.toLowerCase();
     }
 
     /**
@@ -30,19 +30,8 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskManager taskManager, Ui ui) throws DukeException {
-        // Position of find description
-        int descPos = line.indexOf(" ");
-        String description;
-
-        // Check for blank description
-        try {
-            description = line.substring(descPos).strip();
-        } catch (StringIndexOutOfBoundsException e) {
-            ui.printEmpty(COMMAND_WORD);
-            return;
-        }
-
         ArrayList<Task> tasks = taskManager.findTasksByDesc(description);
+
         ui.printFilterTasks(tasks, description);
 
         super.execute(taskManager, ui);
